@@ -339,7 +339,7 @@ export default function UserPage() {
                   onSelectAllClick={handleSelectAllClick}
                 />
                    {
-                      employeeGetData?.map((item,index)=>{
+                      employeeGetData===undefined ? "":employeeGetData?.map((item,index)=>{
                         return(
                 <TableBody>
                       <TableRow hover key={item.id}  role="checkbox" >
