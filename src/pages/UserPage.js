@@ -114,7 +114,16 @@ export default function UserPage() {
   const [errorForm,setErrorForm]=useState({})
   const[isSubmit,setIsSubmit]=useState(false)
   const [employeeGetData,setGetEmployeeData]=useState()
-   
+  const [employeeEditModel,setEmployeeEditModel]=useState()
+  const [employeeEditId,setEmployeeEditId]=useState()
+  const [employeeEditForm,setEmployeeEditForm]=useState({
+    userName:"",
+    email:"",
+    mobileNumber:"",
+    role:"",
+    password:""
+  })
+
   const hadnleEmployeeOnchange=(e)=>{
     const name=e.target.name
     const value=e.target.value
@@ -195,13 +204,45 @@ export default function UserPage() {
        .then(res=>res.json())
        .then(response=>setGetEmployeeData(response))
   }
+  const hadnleEditEmployeeOnchange=(e)=>{
+    if (e) {
+      const name = e?.target.name;
+      const value = e?.target.value;
+      setEmployeeEditForm({ ...employeeEditId, [name]: value });
+    }
+  }
 
+  const  hadnleEditEmployeeSubmit=(e)=> {
+    e.preventDefault();
+    console.log("employeeEditForm",employeeEditForm)
+    fetch(`http://localhost:5000/user/${employeeEditForm.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(employeeEditForm),
+    }).then((res) => {
+      console.log("res", res);
+    });
+  }
   const handleNewUserModelClose=()=>{
     setNewUserModel(false)
   }
 
   const handleNewUserModelOpen=()=>{
     setNewUserModel(true)
+  }
+  const handleEditModelClose=()=>{
+    setEmployeeEditModel(false)
+  }
+
+  const handleEditModelOpen=(item)=>{
+    setEmployeeEditModel(true)
+    if(item){
+      console.log(item)
+      setEmployeeEditId(item)
+    }
   }
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
@@ -258,7 +299,6 @@ export default function UserPage() {
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
 
   const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
-  console.log("filteredUsers",filteredUsers)
   const isNotFound = !filteredUsers.length && !!filterName;
 
   return (
@@ -280,7 +320,6 @@ export default function UserPage() {
 
         <Card>
           <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
-
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
                <div className='employee-table'>
@@ -294,10 +333,10 @@ export default function UserPage() {
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
-                <TableBody>
                    {
-                      employeeGetData?.map((item)=>{
+                      employeeGetData?.map((item,index)=>{
                         return(
+                <TableBody>
                       <TableRow hover key={item.id}  role="checkbox" >
                       <TableCell padding="checkbox">
                         <Checkbox/>
@@ -324,15 +363,43 @@ export default function UserPage() {
                       </TableCell>
                     </TableRow>
 
-                        )
-                      })
-                    }
                   {emptyRows > 0 && (
                     <TableRow style={{ height: 53 * emptyRows }}>
                       <TableCell colSpan={6} />
                     </TableRow>
                   )}
+                   <Popover
+        open={Boolean(open)}
+        anchorEl={open}
+        onClose={handleCloseMenu}
+        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        PaperProps={{
+          sx: {
+            p: 1,
+            width: 140,
+            '& .MuiMenuItem-root': {
+              px: 1,
+              typography: 'body2',
+              borderRadius: 0.75,
+            },
+          },
+        }}
+      >
+        <MenuItem onClick={()=>handleEditModelOpen(item)}>
+          <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
+          Edit
+        </MenuItem>
+
+        <MenuItem sx={{ color: 'error.main' }}>
+          <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
+          Delete
+        </MenuItem>
+      </Popover>
                 </TableBody>
+                        )
+                      })
+                    }
 
                 {isNotFound && (
                   <TableBody>
@@ -374,34 +441,7 @@ export default function UserPage() {
         </Card>
       </Container>
 
-      <Popover
-        open={Boolean(open)}
-        anchorEl={open}
-        onClose={handleCloseMenu}
-        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        PaperProps={{
-          sx: {
-            p: 1,
-            width: 140,
-            '& .MuiMenuItem-root': {
-              px: 1,
-              typography: 'body2',
-              borderRadius: 0.75,
-            },
-          },
-        }}
-      >
-        <MenuItem>
-          <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
-          Edit
-        </MenuItem>
-
-        <MenuItem sx={{ color: 'error.main' }}>
-          <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
-          Delete
-        </MenuItem>
-      </Popover>
+  
       <div className='new-user-form'>
 
       <Modal
@@ -435,6 +475,42 @@ export default function UserPage() {
         </FormControl>
         <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} type='submit' className="add-employee">
             Add Employee
+          </Button>
+        </form>
+    </div>
+  </Box>
+</Modal>
+<Modal
+  open={employeeEditModel}
+  onClose={handleEditModelClose}
+  aria-labelledby="modal-modal-title"
+  aria-describedby="modal-modal-description"
+>
+  <Box sx={style}>
+    <div className='employee-new-user'>
+        <form onSubmit={hadnleEditEmployeeSubmit}>
+        <FormControl >
+        <TextField  label="User Name" type="text" name="userName" error={errorForm?.userName} value={employeeEditId?.userName} onChange={hadnleEditEmployeeOnchange}/>
+        <p className='employee-error-text'>{errorForm.userName}</p>
+        </FormControl>
+        <FormControl >
+        <TextField  label="Role" name="role" type="text" error={errorForm?.role} defaultValue={employeeEditId?.role} onChange={hadnleEditEmployeeOnchange}/>
+        <p className='employee-error-text'>{errorForm.role}</p>
+        </FormControl>
+        <FormControl >
+        <TextField  label="Mobile Number" type="number" name="mobileNumber" error={errorForm?.mobileNumber} defaultValue={employeeEditId?.mobileNumber} onChange={hadnleEditEmployeeOnchange}/>
+        <p className='employee-error-text'>{errorForm.mobileNumber}</p>
+        </FormControl>
+        <FormControl >
+        <TextField  label="Email address" name="email" type="text" error={errorForm?.email} defaultValue={employeeEditId?.email} onChange={hadnleEditEmployeeOnchange} />
+        <p className='employee-error-text'>{errorForm.email}</p>
+        </FormControl>
+        <FormControl >
+        <TextField  label="Password" error={errorForm?.password}  name="password" type="text" defaultValue={employeeEditId?.password} onChange={hadnleEditEmployeeOnchange} />
+        <p className='employee-error-text'>{errorForm.password}</p>
+        </FormControl>
+        <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} type='submit' className="add-employee">
+            Edit Employee
           </Button>
         </form>
     </div>

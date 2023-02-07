@@ -24,3 +24,6 @@
 .employee-table .MuiTableCell-root div{
   justify-content: center;
 }
+.MuiTableHead-root th{
+    text-align: center;
+}
