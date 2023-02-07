@@ -214,7 +214,13 @@ export default function UserPage() {
 
   const  hadnleEditEmployeeSubmit=(e)=> {
     e.preventDefault();
+    setIsSubmit(true)
+    setErrorForm(validate(employeeEditForm))
     console.log("employeeEditForm",employeeEditForm)
+    editEmployeeData()
+  }
+
+  const editEmployeeData=()=>{
     fetch(`http://localhost:5000/user/${employeeEditForm.id}`, {
       method: "PUT",
       headers: {
@@ -240,7 +246,6 @@ export default function UserPage() {
   const handleEditModelOpen=(item)=>{
     setEmployeeEditModel(true)
     if(item){
-      console.log(item)
       setEmployeeEditId(item)
     }
   }
