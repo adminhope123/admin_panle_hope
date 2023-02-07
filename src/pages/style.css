@@ -21,3 +21,6 @@
     color: red  ;
     margin-top: -8px;
 }
+.employee-table .MuiTableCell-root div{
+  justify-content: center;
+}

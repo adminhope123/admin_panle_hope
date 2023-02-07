@@ -53,12 +53,14 @@ const style = {
   p: 4,
 };
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name', alignRight: false },
-  { id: 'company', label: 'Company', alignRight: false },
+  { id: 'img', label: 'Img', alignRight: false },
+  { id: 'userName', label: 'User Name', alignRight: false },
   { id: 'role', label: 'Role', alignRight: false },
-  { id: 'isVerified', label: 'Verified', alignRight: false },
-  { id: 'status', label: 'Status', alignRight: false },
-  { id: '' },
+  { id: 'email', label: 'Email', alignRight: false },
+  { id: 'mobileNumber', label: 'Mobile Number', alignRight: false },
+  { id: 'password', label: 'Password', alignRight: false },
+  { id: '', label: '', alignRight: false },
+  { id: '', label: '', alignRight: false },
 ];
 
 // ----------------------------------------------------------------------
@@ -111,7 +113,8 @@ export default function UserPage() {
   })
   const [errorForm,setErrorForm]=useState({})
   const[isSubmit,setIsSubmit]=useState(false)
-
+  const [employeeGetData,setGetEmployeeData]=useState()
+   
   const hadnleEmployeeOnchange=(e)=>{
     const name=e.target.name
     const value=e.target.value
@@ -182,11 +185,17 @@ export default function UserPage() {
       }
       return error;
   }
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  
+  useEffect(() => {
+    employeeGetApiFuction()
+  }, [])
+  
+  const employeeGetApiFuction=()=>{
+       fetch("http://localhost:3004/employee")
+       .then(res=>res.json())
+       .then(response=>setGetEmployeeData(response))
+  }
 
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
   const handleNewUserModelClose=()=>{
     setNewUserModel(false)
   }
@@ -249,7 +258,7 @@ export default function UserPage() {
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
 
   const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
-
+  console.log("filteredUsers",filteredUsers)
   const isNotFound = !filteredUsers.length && !!filterName;
 
   return (
@@ -274,7 +283,8 @@ export default function UserPage() {
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
-              <Table>
+               <div className='employee-table'>
+               <Table>
                 <UserListHead
                   order={order}
                   orderBy={orderBy}
@@ -285,43 +295,38 @@ export default function UserPage() {
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, role, status, company, avatarUrl, isVerified } = row;
-                    const selectedUser = selected.indexOf(name) !== -1;
+                   {
+                      employeeGetData?.map((item)=>{
+                        return(
+                      <TableRow hover key={item.id}  role="checkbox" >
+                      <TableCell padding="checkbox">
+                        <Checkbox/>
+                      </TableCell>
 
-                    return (
-                      <TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedUser}>
-                        <TableCell padding="checkbox">
-                          <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, name)} />
-                        </TableCell>
+                      <TableCell component="th" scope="row" padding="none">
+                        <Stack direction="row" alignItems="center" spacing={2}>
+                          <Avatar alt={item.userName}  />
+                        </Stack>
+                      </TableCell>
+                      <TableCell align="center">{item.userName}</TableCell>
+                      <TableCell align="center">{item.role}</TableCell>
+                      <TableCell align="center">{item.email}</TableCell>
+                      <TableCell align="center">{item.mobileNumber}</TableCell>
+                      <TableCell align="center">{item.password}</TableCell>
+                      <TableCell align="center">
+                        {/* <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label> */}
+                      </TableCell>
 
-                        <TableCell component="th" scope="row" padding="none">
-                          <Stack direction="row" alignItems="center" spacing={2}>
-                            <Avatar alt={name} src={avatarUrl} />
-                            <Typography variant="subtitle2" noWrap>
-                              {name}
-                            </Typography>
-                          </Stack>
-                        </TableCell>
+                      <TableCell align="right">
+                        <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
+                          <Iconify icon={'eva:more-vertical-fill'} />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
 
-                        <TableCell align="left">{company}</TableCell>
-
-                        <TableCell align="left">{role}</TableCell>
-
-                        <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
-
-                        <TableCell align="left">
-                          <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
-                        </TableCell>
-
-                        <TableCell align="right">
-                          <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
-                            <Iconify icon={'eva:more-vertical-fill'} />
-                          </IconButton>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
+                        )
+                      })
+                    }
                   {emptyRows > 0 && (
                     <TableRow style={{ height: 53 * emptyRows }}>
                       <TableCell colSpan={6} />
@@ -353,6 +358,7 @@ export default function UserPage() {
                   </TableBody>
                 )}
               </Table>
+               </div>
             </TableContainer>
           </Scrollbar>
 
