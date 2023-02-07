@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 // @mui
 import {
   Card,
@@ -21,18 +21,37 @@ import {
   IconButton,
   TableContainer,
   TablePagination,
+  Modal,
+  Box,
+  TextField,
+  FormControl,
+  InputLabel,
+  OutlinedInput,
+  InputAdornment,
 } from '@mui/material';
 // components
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Label from '../components/label';
 import Iconify from '../components/iconify';
 import Scrollbar from '../components/scrollbar';
 // sections
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 // mock
+import './style.css'
 import USERLIST from '../_mock/user';
 
 // ----------------------------------------------------------------------
-
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  borderRadius: "13px",
+  p: 4,
+};
 const TABLE_HEAD = [
   { id: 'name', label: 'Name', alignRight: false },
   { id: 'company', label: 'Company', alignRight: false },
@@ -75,19 +94,106 @@ function applySortFilter(array, comparator, query) {
 
 export default function UserPage() {
   const [open, setOpen] = useState(null);
-
   const [page, setPage] = useState(0);
-
   const [order, setOrder] = useState('asc');
-
   const [selected, setSelected] = useState([]);
-
   const [orderBy, setOrderBy] = useState('name');
-
   const [filterName, setFilterName] = useState('');
-
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [newUserModel,setNewUserModel]=useState()
+  const [showPassword, setShowPassword] =useState(false);
+  const [employeeDataForm,setEmployeeForm]=useState({
+    userName:"",
+    email:"",
+    mobileNumber:"",
+    role:"",
+    password:""
+  })
+  const [errorForm,setErrorForm]=useState({})
+  const[isSubmit,setIsSubmit]=useState(false)
 
+  const hadnleEmployeeOnchange=(e)=>{
+    const name=e.target.name
+    const value=e.target.value
+    setEmployeeForm({...employeeDataForm,[name]:value})
+   }
+   const hadnleEmployeeSubmit=(e)=>{
+   e.preventDefault()
+   setIsSubmit(true)
+   setErrorForm(validate(employeeDataForm))
+  
+ console.log("isSubmit",isSubmit)
+ console.log("employeeDataForm",employeeDataForm)
+ if (Object.keys(errorForm).length === 0 && isSubmit) {
+  employeeDataApi()
+}
+ 
+  }
+  const employeeDataApi=()=>{
+    if (Object.keys(errorForm).length === 0){
+
+      setNewUserModel(false)
+    }
+      fetch("http://localhost:3004/employee",{
+       method:"POST",
+      headers:{
+       'Content-Type': 'application/json'
+       },
+       body:JSON.stringify(employeeDataForm)
+      }).then((result)=>{
+       result.json().then((resp)=>{
+         console.log("resp",resp)
+       })
+      })
+  }
+  const validate=(values)=>{
+    const error={}
+    const emailRegex="^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$"
+    if (!values.userName) {
+      error.userName = "user Name is required";
+      }else if (values.userName.length < 3) {
+      error.userName = "user Name  more than 3 characters";
+      }  else if (values.userName.length > 5) {
+      error.userName = "user Name cannot exceed more than 5 characters";
+      }
+      if (!values.password) {
+      error.password = "password is required";
+      }else if (values.password.length < 3) {
+      error.password = "password  more than 3 characters";
+      }  
+      if (!values.role) {
+      error.role = "role is required";
+      }else if (values.role.length < 3) {
+      error.role = "role  more than 3 characters";
+      }  else if (values.role.length > 5) {
+      error.role = "role cannot exceed more than 5 characters";
+      }
+    if(!values.email){
+      error.email="Enter Email"
+    }else if(!emailRegex&&emailRegex?.test(values.email)){
+      error.email="This is not a valid email format!"
+    }
+    if (!values.mobileNumber) {
+      error.mobileNumber = "phoneNumber is required";
+      }else if (values.mobileNumber.length < 10) {
+      error.mobileNumber = "phoneNumber  more than 10 characters";
+      }  else if (values.mobileNumber.length > 10) {
+      error.mobileNumber = "phoneNumber cannot exceed more than 10 characters";
+      }
+      return error;
+  }
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+  const handleNewUserModelClose=()=>{
+    setNewUserModel(false)
+  }
+
+  const handleNewUserModelOpen=()=>{
+    setNewUserModel(true)
+  }
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
   };
@@ -148,17 +254,18 @@ export default function UserPage() {
 
   return (
     <>
-      <Helmet>
+     <div className='employee-page'>
+     <Helmet>
         <title> User | Minimal UI </title>
       </Helmet>
 
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            User
+          Employee
           </Typography>
-          <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-            New User
+          <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleNewUserModelOpen}>
+            New Employee
           </Button>
         </Stack>
 
@@ -289,6 +396,46 @@ export default function UserPage() {
           Delete
         </MenuItem>
       </Popover>
+      <div className='new-user-form'>
+
+      <Modal
+  open={newUserModel}
+  onClose={handleNewUserModelClose}
+  aria-labelledby="modal-modal-title"
+  aria-describedby="modal-modal-description"
+>
+  <Box sx={style}>
+    <div className='employee-new-user'>
+        <form onSubmit={hadnleEmployeeSubmit}>
+        <FormControl >
+        <TextField  label="User Name" type="text" name="userName" error={errorForm?.userName} value={employeeDataForm.userName} onChange={hadnleEmployeeOnchange}/>
+        <p className='employee-error-text'>{errorForm.userName}</p>
+        </FormControl>
+        <FormControl >
+        <TextField  label="Role" name="role" type="text" error={errorForm?.role} value={employeeDataForm.role} onChange={hadnleEmployeeOnchange}/>
+        <p className='employee-error-text'>{errorForm.role}</p>
+        </FormControl>
+        <FormControl >
+        <TextField  label="Mobile Number" type="number" name="mobileNumber" error={errorForm?.mobileNumber} value={employeeDataForm.mobileNumber} onChange={hadnleEmployeeOnchange}/>
+        <p className='employee-error-text'>{errorForm.mobileNumber}</p>
+        </FormControl>
+        <FormControl >
+        <TextField  label="Email address" name="email" type="text" error={errorForm?.email} value={employeeDataForm.email} onChange={hadnleEmployeeOnchange} />
+        <p className='employee-error-text'>{errorForm.email}</p>
+        </FormControl>
+        <FormControl >
+        <TextField  label="Password" error={errorForm?.password}  name="password" type="text" value={employeeDataForm.password} onChange={hadnleEmployeeOnchange} />
+        <p className='employee-error-text'>{errorForm.password}</p>
+        </FormControl>
+        <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} type='submit' className="add-employee">
+            Add Employee
+          </Button>
+        </form>
+    </div>
+  </Box>
+</Modal>
+      </div>
+     </div>
     </>
   );
 }

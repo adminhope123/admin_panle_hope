@@ -1,0 +1,23 @@
+.employee-new-user form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+.employee-new-user form  div{
+    margin-bottom: 5px
+}
+.employee-new-user form  input{
+    padding: 13px;
+    width: 218px;
+}
+.employee-new-user .add-employee{
+    width: 252px !important;
+    background-color: #162b4c;
+}
+.employee-error-text{
+    margin: 0px;
+    font-size: 11px;
+    color: red  ;
+    margin-top: -8px;
+}
