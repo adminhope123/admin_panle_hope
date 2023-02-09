@@ -36,10 +36,11 @@ import {
 // components
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { useDispatch ,useSelector } from 'react-redux';
+import { loadUsers } from '../Redux/actions';
 import Label from '../components/label';
 import Iconify from '../components/iconify';
 import Scrollbar from '../components/scrollbar';
-
 // sections
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 // mock
@@ -100,6 +101,7 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function UserPage() {
+  const dispatch=useDispatch( )
   const [open, setOpen] = useState(null);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
@@ -247,6 +249,7 @@ export default function UserPage() {
 
   useEffect(() => {
     employeeGetApiFuction();
+    dispatch(loadUsers())
   }, []);
 
   const employeeGetApiFuction = () => {
