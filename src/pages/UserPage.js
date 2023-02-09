@@ -28,6 +28,10 @@ import {
   InputLabel,
   OutlinedInput,
   InputAdornment,
+  Snackbar,
+  StackProps,
+  MuiAlert,
+  Alert
 } from '@mui/material';
 // components
 import Visibility from '@mui/icons-material/Visibility';
@@ -35,6 +39,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Label from '../components/label';
 import Iconify from '../components/iconify';
 import Scrollbar from '../components/scrollbar';
+
 // sections
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 // mock
@@ -104,24 +109,32 @@ export default function UserPage() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [newUserModel, setNewUserModel] = useState();
   const [showPassword, setShowPassword] = useState(false);
+  const [addEmployeeAlert,setAddEmployeeAlert]=useState(false)
+  const [allReadyDataAlert,setAllReadyDataAlert]=useState(false)
+  const [employeeEditAlert,setEmployeeEditAlert]=useState(false)
+  const [employeeDeleteAlert,setEmployeeDeleteAlert]=useState(false)
+  const [errorForm, setErrorForm] = useState({});
+  const [isSubmit, setIsSubmit] = useState(false);
+  const [employeeGetData, setGetEmployeeData] = useState();
+  const [employeeEditModel, setEmployeeEditModel] = useState();
+  const [employeeEditId, setEmployeeEditId] = useState();
   const [employeeDataForm, setEmployeeForm] = useState({
     userName: '',
     email: '',
     mobileNumber: '',
     role: '',
     password: '',
+    address:'',
+    salary:''
   });
-  const [errorForm, setErrorForm] = useState({});
-  const [isSubmit, setIsSubmit] = useState(false);
-  const [employeeGetData, setGetEmployeeData] = useState();
-  const [employeeEditModel, setEmployeeEditModel] = useState();
-  const [employeeEditId, setEmployeeEditId] = useState();
   const [employeeEditForm, setEmployeeEditForm] = useState({
     userName: '',
     email: '',
     mobileNumber: '',
     role: '',
     password: '',
+    address:'',
+    salary:''
   });
 
   const hadnleEmployeeOnchange = (e) => {
@@ -137,13 +150,49 @@ export default function UserPage() {
     console.log('isSubmit', isSubmit);
     console.log('employeeDataForm', employeeDataForm);
     if (Object.keys(errorForm).length === 0 && isSubmit) {
-      employeeDataApi();
+      const filterData=employeeGetData?.filter((item)=>item.email===employeeDataForm.email && item?.username===employeeDataForm?.username)
+      console.log("filterData",filterData)
+      if(filterData.length===0){
+        employeeDataApi();
+      }
+      else{
+        setAllReadyDataAlert(true)
+        }
     }
   };
+  const allReadyDataAlertFunctionClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setAllReadyDataAlert(false);
+  };
+  const allAddEmployeeAlertFunctionClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setAllReadyDataAlert(false);
+  }
+
+  const editAlertFunctionClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setEmployeeEditAlert(false);
+  }
+    const deleteEmployeeAlertFunctionClose = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+
+      setEmployeeDeleteAlert(false);
+};
   const employeeDataApi = () => {
     if (Object.keys(errorForm).length === 0) {
       setNewUserModel(false);
+      setAllReadyDataAlert(false)
     }
+     
     fetch('http://localhost:3004/employee', {
       method: 'POST',
       headers: {
@@ -153,6 +202,7 @@ export default function UserPage() {
     }).then((result) => {
       result.json().then((resp) => {
         console.log('resp', resp);
+        setAddEmployeeAlert(true)
       });
     });
   };
@@ -163,19 +213,21 @@ export default function UserPage() {
       error.userName = 'user Name is required';
     } else if (values.userName.length < 3) {
       error.userName = 'user Name  more than 3 characters';
-    } else if (values.userName.length > 5) {
+    } else if (values.userName.length > 8) {
       error.userName = 'user Name cannot exceed more than 5 characters';
     }
     if (!values.password) {
       error.password = 'password is required';
     } else if (values.password.length < 3) {
       error.password = 'password  more than 3 characters';
+    }if (values.userName?.length > 8) {
+      error.userName = 'user Name cannot exceed more than 5 characters';
     }
     if (!values.role) {
       error.role = 'role is required';
     } else if (values.role.length < 3) {
       error.role = 'role  more than 3 characters';
-    } else if (values.role.length > 5) {
+    } else if (values.role.length > 8) {
       error.role = 'role cannot exceed more than 5 characters';
     }
     if (!values.email) {
@@ -205,12 +257,12 @@ export default function UserPage() {
   const employeeDeleteApiFunction = (item) => {
     console.log("employeeEditId",employeeEditId)
   if(employeeEditId){
-
     fetch(`http://localhost:3004/employee/${employeeEditId?.id}`,{
       method: 'DELETE'
     }).then((result)=>{
       result.json().then((resp)=>{
         console.log("resp",resp)
+        setEmployeeDeleteAlert(true)
       })
     })
   }
@@ -232,19 +284,25 @@ export default function UserPage() {
   };
 
   const editEmployeeData = () => {
-    fetch(`http://localhost:3004/employee/${employeeEditForm?.id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      body: JSON.stringify(employeeEditForm),
-    }).then((res) => {
-      console.log('res', res);
-    });
+    console.log("employeeEditForm",employeeEditForm)
+    if(employeeEditForm){
+      fetch(`http://localhost:3004/employee/${employeeEditId?.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify(employeeEditForm),
+      }).then((res) => {
+        console.log('res', res);
+        setEmployeeEditAlert(true)
+      });   
+    }
+    
   };
   const handleNewUserModelClose = () => {
     setNewUserModel(false);
+    setAllReadyDataAlert(false)
   };
 
   const handleNewUserModelOpen = () => {
@@ -345,35 +403,35 @@ export default function UserPage() {
               <TableContainer sx={{ minWidth: 800 }}>
                 <div className="employee-table">
                   <Table>
-                    <UserListHead
-                      order={order}
-                      orderBy={orderBy}
-                      headLabel={TABLE_HEAD}
-                      rowCount={USERLIST.length}
-                      numSelected={selected.length}
-                      onRequestSort={handleRequestSort}
-                      onSelectAllClick={handleSelectAllClick}
-                    />
+                     <UserListHead
+                     order={order}
+                     orderBy={orderBy}
+                     headLabel={TABLE_HEAD}
+                     rowCount={USERLIST?.length}
+                     numSelected={selected?.length}
+                     onRequestSort={handleRequestSort}
+                     onSelectAllClick={handleSelectAllClick}
+                   />
                     {employeeGetData === undefined
                       ? ''
-                      : employeeGetData?.map((item, index) => {
+                      : employeeGetData&&employeeGetData?.map((item, index) => {
                           return (
                             <TableBody>
-                              <TableRow hover key={item.id} role="checkbox">
+                              <TableRow hover key={item?.id} role="checkbox">
                                 <TableCell padding="checkbox">
                                   <Checkbox />
                                 </TableCell>
 
                                 <TableCell component="th" scope="row" padding="none">
                                   <Stack direction="row" alignItems="center" spacing={2}>
-                                    <Avatar alt={item.userName} />
+                                    <Avatar alt={item?.userName} />
                                   </Stack>
                                 </TableCell>
-                                <TableCell align="center">{item.userName}</TableCell>
-                                <TableCell align="center">{item.role}</TableCell>
-                                <TableCell align="center">{item.email}</TableCell>
-                                <TableCell align="center">{item.mobileNumber}</TableCell>
-                                <TableCell align="center">{item.password}</TableCell>
+                                <TableCell align="center">{item?.userName}</TableCell>
+                                <TableCell align="center">{item?.role}</TableCell>
+                                <TableCell align="center">{item?.email}</TableCell>
+                                <TableCell align="center">{item?.mobileNumber}</TableCell>
+                                <TableCell align="center">{item?.password}</TableCell>
                                 <TableCell align="center">
                                   {/* <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label> */}
                                 </TableCell>
@@ -384,11 +442,11 @@ export default function UserPage() {
                                   </IconButton>
                                 </TableCell>
                               </TableRow>
-                              {emptyRows > 0 && (
+                              {/* {emptyRows&&emptyRows > 0 && (
                                 <TableRow style={{ height: 53 * emptyRows }}>
                                   <TableCell colSpan={6} />
                                 </TableRow>
-                              )}
+                              )} */}
                               <Popover
                                 open={Boolean(open)}
                                 anchorEl={open}
@@ -422,13 +480,14 @@ export default function UserPage() {
                           );
                         })}
 
-                    {isNotFound && (
+                    {employeeGetData?.length===0 && (
                       <TableBody>
                         <TableRow>
                           <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
                             <Paper
                               sx={{
                                 textAlign: 'center',
+                                marginLeft:"33%"
                               }}
                             >
                               <Typography variant="h6" paragraph>
@@ -436,9 +495,8 @@ export default function UserPage() {
                               </Typography>
 
                               <Typography variant="body2">
-                                No results found for &nbsp;
-                                <strong>&quot;{filterName}&quot;</strong>.
-                                <br /> Try checking for typos or using complete words.
+                                No results found   &nbsp;
+                                <br />Please  Add Employee
                               </Typography>
                             </Paper>
                           </TableCell>
@@ -450,7 +508,7 @@ export default function UserPage() {
               </TableContainer>
             </Scrollbar>
 
-            <TablePagination
+            {/* <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
               count={USERLIST.length}
@@ -458,7 +516,7 @@ export default function UserPage() {
               page={page}
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}
-            />
+            /> */}
           </Card>
         </Container>
 
@@ -478,7 +536,7 @@ export default function UserPage() {
                       type="text"
                       name="userName"
                       error={errorForm?.userName}
-                      value={employeeDataForm.userName}
+                      value={employeeDataForm?.userName}
                       onChange={hadnleEmployeeOnchange}
                     />
                     <p className="employee-error-text">{errorForm.userName}</p>
@@ -489,7 +547,7 @@ export default function UserPage() {
                       name="role"
                       type="text"
                       error={errorForm?.role}
-                      value={employeeDataForm.role}
+                      value={employeeDataForm?.role}
                       onChange={hadnleEmployeeOnchange}
                     />
                     <p className="employee-error-text">{errorForm.role}</p>
@@ -500,7 +558,7 @@ export default function UserPage() {
                       type="number"
                       name="mobileNumber"
                       error={errorForm?.mobileNumber}
-                      value={employeeDataForm.mobileNumber}
+                      value={employeeDataForm?.mobileNumber}
                       onChange={hadnleEmployeeOnchange}
                     />
                     <p className="employee-error-text">{errorForm.mobileNumber}</p>
@@ -511,10 +569,32 @@ export default function UserPage() {
                       name="email"
                       type="text"
                       error={errorForm?.email}
-                      value={employeeDataForm.email}
+                      value={employeeDataForm?.email}
                       onChange={hadnleEmployeeOnchange}
                     />
                     <p className="employee-error-text">{errorForm.email}</p>
+                  </FormControl>
+                  <FormControl>
+                    <TextField
+                      label="Address"
+                      name="text"
+                      type="text"
+                      error={errorForm?.address}
+                      defaultValue={employeeEditId?.address}
+                      onChange={hadnleEditEmployeeOnchange}
+                    />
+                    <p className="employee-error-text">{errorForm.address}</p>
+                  </FormControl>
+                  <FormControl>
+                    <TextField
+                      label="Salary"
+                      name="salary"
+                      type="number"
+                      error={errorForm?.salary}
+                      defaultValue={employeeEditId?.salary}
+                      onChange={hadnleEditEmployeeOnchange}
+                    />
+                    <p className="employee-error-text">{errorForm.salary}</p>
                   </FormControl>
                   <FormControl>
                     <TextField
@@ -522,7 +602,7 @@ export default function UserPage() {
                       error={errorForm?.password}
                       name="password"
                       type="text"
-                      value={employeeDataForm.password}
+                      value={employeeDataForm?.password}
                       onChange={hadnleEmployeeOnchange}
                     />
                     <p className="employee-error-text">{errorForm.password}</p>
@@ -594,6 +674,28 @@ export default function UserPage() {
                   </FormControl>
                   <FormControl>
                     <TextField
+                      label="Address"
+                      name="text"
+                      type="text"
+                      error={errorForm?.address}
+                      defaultValue={employeeEditId?.address}
+                      onChange={hadnleEditEmployeeOnchange}
+                    />
+                    <p className="employee-error-text">{errorForm.address}</p>
+                  </FormControl>
+                  <FormControl>
+                    <TextField
+                      label="Salary"
+                      name="salary"
+                      type="number"
+                      error={errorForm?.salary}
+                      defaultValue={employeeEditId?.salary}
+                      onChange={hadnleEditEmployeeOnchange}
+                    />
+                    <p className="employee-error-text">{errorForm.salary}</p>
+                  </FormControl>
+                  <FormControl>
+                    <TextField
                       label="Password"
                       error={errorForm?.password}
                       name="password"
@@ -615,6 +717,42 @@ export default function UserPage() {
               </div>
             </Box>
           </Modal>
+        </div>
+        <div className='stack-alert-employee'>
+        <Stack>
+    <Snackbar open={allReadyDataAlert} autoHideDuration={6000} onClose={allReadyDataAlertFunctionClose}>
+        <Alert onClose={allReadyDataAlertFunctionClose} severity="error" >
+         UserName and Email Already Register
+        </Alert>
+      </Snackbar>
+    </Stack>
+    <div className='add-employee-alert'>
+    <Stack>
+    <Snackbar open={addEmployeeAlert} autoHideDuration={6000} onClose={allAddEmployeeAlertFunctionClose}>
+        <Alert onClose={allAddEmployeeAlertFunctionClose} severity="success" >
+         Add Employee successful
+        </Alert>
+      </Snackbar>
+    </Stack>
+    </div>
+    <div className='edit-employee-alert'>
+    <Stack>
+    <Snackbar open={employeeEditAlert} autoHideDuration={6000} onClose={editAlertFunctionClose}>
+        <Alert onClose={editAlertFunctionClose} severity="success" >
+         Edit Employee successful
+        </Alert>
+      </Snackbar>
+    </Stack>
+    </div>
+    <div className='delete-employee-alert'>
+    <Stack>
+    <Snackbar open={employeeDeleteAlert} autoHideDuration={6000} onClose={deleteEmployeeAlertFunctionClose}>
+        <Alert onClose={deleteEmployeeAlertFunctionClose} severity="error" >
+         Delete Employee successful
+        </Alert>
+      </Snackbar>
+    </Stack>
+    </div>
         </div>
       </div>
     </>

@@ -27,3 +27,22 @@
 .MuiTableHead-root th{
     text-align: center;
 }
+.stack-alert-employee .MuiSnackbar-root{
+    width: 386px !important;
+    top:-75% !important;
+    height: 300px !important;
+    left:36% !important;
+}
+.add-employee-alert  .MuiSnackbar-root{
+    width: 386px !important;
+    height: 300px !important;
+    top: -88% !important;
+    left: 83%!important;
+}
+.add-employee-alert .MuiPaper-root{
+    background-color: #218126;
+    color: white;
+}
+.add-employee-alert svg{
+    color:white;
+}
