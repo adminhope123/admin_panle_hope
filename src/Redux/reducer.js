@@ -3,18 +3,28 @@ import * as type from './actionType'
 const  initialState={
     users:[],
     user:{},
-    loading:false
+    loading:true
 }
 
 const usersReducers=(state=initialState,action)=>{
     switch(action.type){
 
+        case type.EMPLOYEE_GET:
+        return{
+            ...state,
+            users:action.payload,
+            loading:false
+        };
         case type.EMPLOYEE_ADD:
             return{
                 ...state,
-                users:action.payload,
                 loading:false
             };
+            case type.EMPLOYEE_DELETE:
+                return{
+                    ...state,
+                    loading:false
+                };
         default:
             return state;
     }

@@ -37,7 +37,7 @@ import {
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useDispatch ,useSelector } from 'react-redux';
-import { loadUsers } from '../Redux/actions';
+import { addEmployeeApi, deleteEmployeeApi, getEmployeeApi } from '../Redux/actions';
 import Label from '../components/label';
 import Iconify from '../components/iconify';
 import Scrollbar from '../components/scrollbar';
@@ -138,7 +138,8 @@ export default function UserPage() {
     address:'',
     salary:''
   });
-
+  const {userName,email,mobileNumber,role,password,address,salary}=employeeDataForm;
+   const {users}=useSelector(state=>state.data)
   const hadnleEmployeeOnchange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -148,18 +149,19 @@ export default function UserPage() {
     e.preventDefault();
     setIsSubmit(true);
     setErrorForm(validate(employeeDataForm));
-
+    
     console.log('isSubmit', isSubmit);
     console.log('employeeDataForm', employeeDataForm);
+    dispatch(addEmployeeApi(employeeDataForm))
     if (Object.keys(errorForm).length === 0 && isSubmit) {
       const filterData=employeeGetData?.filter((item)=>item.email===employeeDataForm.email && item?.username===employeeDataForm?.username)
       console.log("filterData",filterData)
       if(filterData.length===0){
-        employeeDataApi();
+        // employeeDataApi();
       }
       else{
         setAllReadyDataAlert(true)
-        }
+      }
     }
   };
   const allReadyDataAlertFunctionClose = (event, reason) => {
@@ -195,18 +197,18 @@ export default function UserPage() {
       setAllReadyDataAlert(false)
     }
      
-    fetch('http://localhost:3004/employee', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(employeeDataForm),
-    }).then((result) => {
-      result.json().then((resp) => {
-        console.log('resp', resp);
-        setAddEmployeeAlert(true)
-      });
-    });
+    // fetch('http://localhost:3004/employee', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify(employeeDataForm),
+    // }).then((result) => {
+    //   result.json().then((resp) => {
+    //     console.log('resp', resp);
+    //     setAddEmployeeAlert(true)
+    //   });
+    // });
   };
   const validate = (values) => {
     const error = {};
@@ -249,7 +251,7 @@ export default function UserPage() {
 
   useEffect(() => {
     employeeGetApiFuction();
-    dispatch(loadUsers())
+   
   }, []);
 
   const employeeGetApiFuction = () => {
@@ -257,17 +259,19 @@ export default function UserPage() {
       .then((res) => res.json())
       .then((response) => setGetEmployeeData(response));
   };
-  const employeeDeleteApiFunction = (item) => {
+  const employeeDeleteApiFunction = (id) => {
     console.log("employeeEditId",employeeEditId)
-  if(employeeEditId){
-    fetch(`http://localhost:3004/employee/${employeeEditId?.id}`,{
-      method: 'DELETE'
-    }).then((result)=>{
-      result.json().then((resp)=>{
-        console.log("resp",resp)
-        setEmployeeDeleteAlert(true)
-      })
-    })
+    console.log("id",id)
+    if(id){
+    dispatch(deleteEmployeeApi(id))
+    // fetch(`http://localhost:3004/employee/${employeeEditId?.id}`,{
+    //   method: 'DELETE'
+    // }).then((result)=>{
+    //   result.json().then((resp)=>{
+    //     console.log("resp",resp)
+    //     setEmployeeDeleteAlert(true)
+    //   })
+    // })
   }
   };
   const hadnleEditEmployeeOnchange = (e) => {
@@ -284,7 +288,11 @@ export default function UserPage() {
     setErrorForm(validate(employeeEditForm));
     console.log('employeeEditForm', employeeEditForm);
     editEmployeeData();
+    
   };
+useEffect(() => {
+  dispatch(getEmployeeApi())
+}, [])
 
   const editEmployeeData = () => {
     console.log("employeeEditForm",employeeEditForm)
@@ -415,9 +423,9 @@ export default function UserPage() {
                      onRequestSort={handleRequestSort}
                      onSelectAllClick={handleSelectAllClick}
                    />
-                    {employeeGetData === undefined
+                    {users === undefined
                       ? ''
-                      : employeeGetData&&employeeGetData?.map((item, index) => {
+                      : users&&users?.map((item, index) => {
                           return (
                             <TableBody>
                               <TableRow hover key={item?.id} role="checkbox">
@@ -435,21 +443,13 @@ export default function UserPage() {
                                 <TableCell align="center">{item?.email}</TableCell>
                                 <TableCell align="center">{item?.mobileNumber}</TableCell>
                                 <TableCell align="center">{item?.password}</TableCell>
-                                <TableCell align="center">
-                                  {/* <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label> */}
-                                </TableCell>
-
                                 <TableCell align="right">
                                   <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
                                     <Iconify icon={'eva:more-vertical-fill'} onClick={()=>handleEmployeeClickId(item)}/>
                                   </IconButton>
                                 </TableCell>
                               </TableRow>
-                              {/* {emptyRows&&emptyRows > 0 && (
-                                <TableRow style={{ height: 53 * emptyRows }}>
-                                  <TableCell colSpan={6} />
-                                </TableRow>
-                              )} */}
+                           
                               <Popover
                                 open={Boolean(open)}
                                 anchorEl={open}
@@ -468,13 +468,12 @@ export default function UserPage() {
                                   },
                                 }}
                               >
-                                  {/* <button onClick={() => handleEditModelOpen(item)}>decd</button> */}
                                 <MenuItem onClick={() => handleEditModelOpen(item)}>
                                   <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
                                   Edit
                                 </MenuItem>
 
-                                <MenuItem sx={{ color: 'error.main' }} onClick={()=>employeeDeleteApiFunction(item)}>
+                                <MenuItem sx={{ color: 'error.main' }} onClick={()=>employeeDeleteApiFunction(item.id)}>
                                   <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
                                   Delete
                                 </MenuItem>
@@ -483,7 +482,7 @@ export default function UserPage() {
                           );
                         })}
 
-                    {employeeGetData?.length===0 && (
+                    {/* {employeeGetData?.length===0 && (
                       <TableBody>
                         <TableRow>
                           <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
@@ -505,7 +504,7 @@ export default function UserPage() {
                           </TableCell>
                         </TableRow>
                       </TableBody>
-                    )}
+                    )} */}
                   </Table>
                 </div>
               </TableContainer>
@@ -539,7 +538,7 @@ export default function UserPage() {
                       type="text"
                       name="userName"
                       error={errorForm?.userName}
-                      value={employeeDataForm?.userName}
+                      value={userName}
                       onChange={hadnleEmployeeOnchange}
                     />
                     <p className="employee-error-text">{errorForm.userName}</p>
@@ -550,7 +549,7 @@ export default function UserPage() {
                       name="role"
                       type="text"
                       error={errorForm?.role}
-                      value={employeeDataForm?.role}
+                      value={role}
                       onChange={hadnleEmployeeOnchange}
                     />
                     <p className="employee-error-text">{errorForm.role}</p>
@@ -561,7 +560,7 @@ export default function UserPage() {
                       type="number"
                       name="mobileNumber"
                       error={errorForm?.mobileNumber}
-                      value={employeeDataForm?.mobileNumber}
+                      value={mobileNumber}
                       onChange={hadnleEmployeeOnchange}
                     />
                     <p className="employee-error-text">{errorForm.mobileNumber}</p>
@@ -572,7 +571,7 @@ export default function UserPage() {
                       name="email"
                       type="text"
                       error={errorForm?.email}
-                      value={employeeDataForm?.email}
+                      value={email}
                       onChange={hadnleEmployeeOnchange}
                     />
                     <p className="employee-error-text">{errorForm.email}</p>
@@ -594,7 +593,7 @@ export default function UserPage() {
                       name="salary"
                       type="number"
                       error={errorForm?.salary}
-                      defaultValue={employeeEditId?.salary}
+                      defaultValue={salary}
                       onChange={hadnleEditEmployeeOnchange}
                     />
                     <p className="employee-error-text">{errorForm.salary}</p>
@@ -605,7 +604,7 @@ export default function UserPage() {
                       error={errorForm?.password}
                       name="password"
                       type="text"
-                      value={employeeDataForm?.password}
+                      value={password}
                       onChange={hadnleEmployeeOnchange}
                     />
                     <p className="employee-error-text">{errorForm.password}</p>
