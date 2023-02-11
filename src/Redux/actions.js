@@ -44,7 +44,7 @@ export const deleteEmployeeApi=(id)=>{
             .then((resp)=>{
             console.log("resp",resp)
             dispatch(deleteEmployee())
-            dispatch(getEmployee())
+            dispatch(getEmployeeApi())
         })
         .catch((error)=>console.log("error",error))
     }
