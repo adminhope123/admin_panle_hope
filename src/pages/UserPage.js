@@ -31,12 +31,12 @@ import {
   Snackbar,
   StackProps,
   MuiAlert,
-  Alert
+  Alert,
 } from '@mui/material';
 // components
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { useDispatch ,useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addEmployeeApi, deleteEmployeeApi, getEmployeeApi } from '../Redux/actions';
 import Label from '../components/label';
 import Iconify from '../components/iconify';
@@ -101,8 +101,9 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function UserPage() {
-  const dispatch=useDispatch( )
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(null);
+  const [apicall, setApicall] = useState(false);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
@@ -111,10 +112,10 @@ export default function UserPage() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [newUserModel, setNewUserModel] = useState();
   const [showPassword, setShowPassword] = useState(false);
-  const [addEmployeeAlert,setAddEmployeeAlert]=useState(false)
-  const [allReadyDataAlert,setAllReadyDataAlert]=useState(false)
-  const [employeeEditAlert,setEmployeeEditAlert]=useState(false)
-  const [employeeDeleteAlert,setEmployeeDeleteAlert]=useState(false)
+  const [addEmployeeAlert, setAddEmployeeAlert] = useState(false);
+  const [allReadyDataAlert, setAllReadyDataAlert] = useState(false);
+  const [employeeEditAlert, setEmployeeEditAlert] = useState(false);
+  const [employeeDeleteAlert, setEmployeeDeleteAlert] = useState(false);
   const [errorForm, setErrorForm] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
   const [employeeGetData, setGetEmployeeData] = useState();
@@ -126,8 +127,8 @@ export default function UserPage() {
     mobileNumber: '',
     role: '',
     password: '',
-    address:'',
-    salary:''
+    address: '',
+    salary: '',
   });
   const [employeeEditForm, setEmployeeEditForm] = useState({
     userName: '',
@@ -135,11 +136,11 @@ export default function UserPage() {
     mobileNumber: '',
     role: '',
     password: '',
-    address:'',
-    salary:''
+    address: '',
+    salary: '',
   });
-  const {userName,email,mobileNumber,role,password,address,salary}=employeeDataForm;
-   const {users}=useSelector(state=>state.data)
+  const { userName, email, mobileNumber, role, password, address, salary } = employeeDataForm;
+  const { users } = useSelector((state) => state.data);
   const hadnleEmployeeOnchange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -149,19 +150,19 @@ export default function UserPage() {
     e.preventDefault();
     setIsSubmit(true);
     setErrorForm(validate(employeeDataForm));
-    
+
     console.log('isSubmit', isSubmit);
     console.log('employeeDataForm', employeeDataForm);
-    dispatch(addEmployeeApi(employeeDataForm))
-    if (Object.keys(errorForm).length === 0 && isSubmit) {
-      const filterData=employeeGetData?.filter((item)=>item.email===employeeDataForm.email && item?.username===employeeDataForm?.username)
-      console.log("filterData",filterData)
-      if(filterData.length===0){
-        // employeeDataApi();
-      }
-      else{
-        setAllReadyDataAlert(true)
-      }
+
+    const data = users.filter((value) => {
+      return value.userName === employeeDataForm.userName && value.email === employeeDataForm.email;
+    });
+    if (data.legnth === 0) {
+      console.log(data, 'dataaaaaa');
+      dispatch(addEmployeeApi(employeeDataForm, users));
+    } else {
+      setAllReadyDataAlert(true);
+      console.log('name');
     }
   };
   const allReadyDataAlertFunctionClose = (event, reason) => {
@@ -176,27 +177,27 @@ export default function UserPage() {
       return;
     }
     setAllReadyDataAlert(false);
-  }
+  };
 
   const editAlertFunctionClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
     }
     setEmployeeEditAlert(false);
-  }
-    const deleteEmployeeAlertFunctionClose = (event, reason) => {
-      if (reason === 'clickaway') {
-        return;
-      }
+  };
+  const deleteEmployeeAlertFunctionClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
 
-      setEmployeeDeleteAlert(false);
-};
+    setEmployeeDeleteAlert(false);
+  };
   const employeeDataApi = () => {
     if (Object.keys(errorForm).length === 0) {
       setNewUserModel(false);
-      setAllReadyDataAlert(false)
+      setAllReadyDataAlert(false);
     }
-     
+
     // fetch('http://localhost:3004/employee', {
     //   method: 'POST',
     //   headers: {
@@ -215,43 +216,57 @@ export default function UserPage() {
     const emailRegex = '^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$';
     if (!values.userName) {
       error.userName = 'user Name is required';
+      setApicall(true);
     } else if (values.userName.length < 3) {
       error.userName = 'user Name  more than 3 characters';
+      setApicall(true);
     } else if (values.userName.length > 8) {
       error.userName = 'user Name cannot exceed more than 5 characters';
+      setApicall(true);
     }
     if (!values.password) {
       error.password = 'password is required';
+      setApicall(true);
     } else if (values.password.length < 3) {
       error.password = 'password  more than 3 characters';
-    }if (values.userName?.length > 8) {
+      setApicall(true);
+    }
+    if (values.userName?.length > 8) {
       error.userName = 'user Name cannot exceed more than 5 characters';
+      setApicall(true);
     }
     if (!values.role) {
       error.role = 'role is required';
+      setApicall(true);
     } else if (values.role.length < 3) {
       error.role = 'role  more than 3 characters';
+      setApicall(true);
     } else if (values.role.length > 8) {
       error.role = 'role cannot exceed more than 5 characters';
+      setApicall(true);
     }
     if (!values.email) {
       error.email = 'Enter Email';
+      setApicall(true);
     } else if (!emailRegex && emailRegex?.test(values.email)) {
       error.email = 'This is not a valid email format!';
+      setApicall(true);
     }
     if (!values.mobileNumber) {
       error.mobileNumber = 'phoneNumber is required';
+      setApicall(true);
     } else if (values.mobileNumber.length < 10) {
       error.mobileNumber = 'phoneNumber  more than 10 characters';
+      setApicall(true);
     } else if (values.mobileNumber.length > 10) {
       error.mobileNumber = 'phoneNumber cannot exceed more than 10 characters';
+      setApicall(true);
     }
     return error;
   };
 
   useEffect(() => {
     employeeGetApiFuction();
-   
   }, []);
 
   const employeeGetApiFuction = () => {
@@ -260,19 +275,19 @@ export default function UserPage() {
       .then((response) => setGetEmployeeData(response));
   };
   const employeeDeleteApiFunction = (id) => {
-    console.log("employeeEditId",employeeEditId)
-    console.log("id",id)
-    if(id){
-    dispatch(deleteEmployeeApi(id))
-    // fetch(`http://localhost:3004/employee/${employeeEditId?.id}`,{
-    //   method: 'DELETE'
-    // }).then((result)=>{
-    //   result.json().then((resp)=>{
-    //     console.log("resp",resp)
-    //     setEmployeeDeleteAlert(true)
-    //   })
-    // })
-  }
+    console.log('employeeEditId', employeeEditId.id);
+
+    if (id) {
+      dispatch(deleteEmployeeApi(employeeEditId.id));
+      // fetch(`http://localhost:3004/employee/${employeeEditId?.id}`,{
+      //   method: 'DELETE'
+      // }).then((result)=>{
+      //   result.json().then((resp)=>{
+      //     console.log("resp",resp)
+      //     setEmployeeDeleteAlert(true)
+      //   })
+      // })
+    }
   };
   const hadnleEditEmployeeOnchange = (e) => {
     if (e) {
@@ -288,15 +303,15 @@ export default function UserPage() {
     setErrorForm(validate(employeeEditForm));
     console.log('employeeEditForm', employeeEditForm);
     editEmployeeData();
-    
   };
-useEffect(() => {
-  dispatch(getEmployeeApi())
-}, [])
+  useEffect(() => {
+    dispatch(getEmployeeApi());
+  }, []);
 
   const editEmployeeData = () => {
-    console.log("employeeEditForm",employeeEditForm)
-    if(employeeEditForm){
+    console.log('employeeEditForm', employeeEditForm);
+    console.log(employeeEditId, 'n22222');
+    if (employeeEditForm) {
       fetch(`http://localhost:3004/employee/${employeeEditId?.id}`, {
         method: 'PUT',
         headers: {
@@ -306,20 +321,20 @@ useEffect(() => {
         body: JSON.stringify(employeeEditForm),
       }).then((res) => {
         console.log('res', res);
-        setEmployeeEditAlert(true)
-      });   
+        setEmployeeEditAlert(true);
+      });
     }
-    
   };
   const handleNewUserModelClose = () => {
     setNewUserModel(false);
-    setAllReadyDataAlert(false)
+    setAllReadyDataAlert(false);
   };
 
   const handleNewUserModelOpen = () => {
     setNewUserModel(true);
   };
   const handleEditModelClose = () => {
+    console.log('close');
     setEmployeeEditModel(false);
   };
 
@@ -327,7 +342,6 @@ useEffect(() => {
     setEmployeeEditModel(true);
   };
   const handleOpenMenu = (event) => {
-   
     setOpen(event.currentTarget);
   };
 
@@ -378,19 +392,18 @@ useEffect(() => {
     setPage(0);
     setFilterName(event.target.value);
   };
-  
-  const handleEmployeeClickId=(item)=>{
-    if(item){
+
+  const handleEmployeeClickId = (item) => {
+    if (item) {
       setEmployeeEditId(item);
     }
-  }
-
-  
+  };
+ 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
 
   const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
   const isNotFound = !filteredUsers.length && !!filterName;
-
+  
   return (
     <>
       <div className="employee-page">
@@ -414,18 +427,19 @@ useEffect(() => {
               <TableContainer sx={{ minWidth: 800 }}>
                 <div className="employee-table">
                   <Table>
-                     <UserListHead
-                     order={order}
-                     orderBy={orderBy}
-                     headLabel={TABLE_HEAD}
-                     rowCount={USERLIST?.length}
-                     numSelected={selected?.length}
-                     onRequestSort={handleRequestSort}
-                     onSelectAllClick={handleSelectAllClick}
-                   />
+                    <UserListHead
+                      order={order}
+                      orderBy={orderBy}
+                      headLabel={TABLE_HEAD}
+                      rowCount={USERLIST?.length}
+                      numSelected={selected?.length}
+                      onRequestSort={handleRequestSort}
+                      onSelectAllClick={handleSelectAllClick}
+                    />
                     {users === undefined
                       ? ''
-                      : users&&users?.map((item, index) => {
+                      : users &&
+                        users?.map((item, index) => {
                           return (
                             <TableBody>
                               <TableRow hover key={item?.id} role="checkbox">
@@ -445,11 +459,14 @@ useEffect(() => {
                                 <TableCell align="center">{item?.password}</TableCell>
                                 <TableCell align="right">
                                   <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
-                                    <Iconify icon={'eva:more-vertical-fill'} onClick={()=>handleEmployeeClickId(item)}/>
+                                    <Iconify
+                                      icon={'eva:more-vertical-fill'}
+                                      onClick={() => handleEmployeeClickId(item)}
+                                    />
                                   </IconButton>
                                 </TableCell>
                               </TableRow>
-                           
+
                               <Popover
                                 open={Boolean(open)}
                                 anchorEl={open}
@@ -473,7 +490,10 @@ useEffect(() => {
                                   Edit
                                 </MenuItem>
 
-                                <MenuItem sx={{ color: 'error.main' }} onClick={()=>employeeDeleteApiFunction(item.id)}>
+                                <MenuItem
+                                  sx={{ color: 'error.main' }}
+                                  onClick={() => employeeDeleteApiFunction(item.id)}
+                                >
                                   <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
                                   Delete
                                 </MenuItem>
@@ -712,6 +732,7 @@ useEffect(() => {
                     startIcon={<Iconify icon="eva:plus-fill" />}
                     type="submit"
                     className="add-employee"
+               
                   >
                     Edit Employee
                   </Button>
@@ -720,41 +741,41 @@ useEffect(() => {
             </Box>
           </Modal>
         </div>
-        <div className='stack-alert-employee'>
-        <Stack>
-    <Snackbar open={allReadyDataAlert} autoHideDuration={6000} onClose={allReadyDataAlertFunctionClose}>
-        <Alert onClose={allReadyDataAlertFunctionClose} severity="error" >
-         UserName and Email Already Register
-        </Alert>
-      </Snackbar>
-    </Stack>
-    <div className='add-employee-alert'>
-    <Stack>
-    <Snackbar open={addEmployeeAlert} autoHideDuration={6000} onClose={allAddEmployeeAlertFunctionClose}>
-        <Alert onClose={allAddEmployeeAlertFunctionClose} severity="success" >
-         Add Employee successful
-        </Alert>
-      </Snackbar>
-    </Stack>
-    </div>
-    <div className='edit-employee-alert'>
-    <Stack>
-    <Snackbar open={employeeEditAlert} autoHideDuration={6000} onClose={editAlertFunctionClose}>
-        <Alert onClose={editAlertFunctionClose} severity="success" >
-         Edit Employee successful
-        </Alert>
-      </Snackbar>
-    </Stack>
-    </div>
-    <div className='delete-employee-alert'>
-    <Stack>
-    <Snackbar open={employeeDeleteAlert} autoHideDuration={6000} onClose={deleteEmployeeAlertFunctionClose}>
-        <Alert onClose={deleteEmployeeAlertFunctionClose} severity="error" >
-         Delete Employee successful
-        </Alert>
-      </Snackbar>
-    </Stack>
-    </div>
+        <div className="stack-alert-employee">
+          <Stack>
+            <Snackbar open={allReadyDataAlert} autoHideDuration={6000} onClose={allReadyDataAlertFunctionClose}>
+              <Alert onClose={allReadyDataAlertFunctionClose} severity="error">
+                UserName and Email Already Register
+              </Alert>
+            </Snackbar>
+          </Stack>
+          <div className="add-employee-alert">
+            <Stack>
+              <Snackbar open={addEmployeeAlert} autoHideDuration={6000} onClose={allAddEmployeeAlertFunctionClose}>
+                <Alert onClose={allAddEmployeeAlertFunctionClose} severity="success">
+                  Add Employee successful
+                </Alert>
+              </Snackbar>
+            </Stack>
+          </div>
+          <div className="edit-employee-alert">
+            <Stack>
+              <Snackbar open={employeeEditAlert} autoHideDuration={6000} onClose={editAlertFunctionClose}>
+                <Alert onClose={editAlertFunctionClose} severity="success">
+                  Edit Employee successful
+                </Alert>
+              </Snackbar>
+            </Stack>
+          </div>
+          <div className="delete-employee-alert">
+            <Stack>
+              <Snackbar open={employeeDeleteAlert} autoHideDuration={6000} onClose={deleteEmployeeAlertFunctionClose}>
+                <Alert onClose={deleteEmployeeAlertFunctionClose} severity="error">
+                  Delete Employee successful
+                </Alert>
+              </Snackbar>
+            </Stack>
+          </div>
         </div>
       </div>
     </>
