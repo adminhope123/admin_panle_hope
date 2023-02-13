@@ -8,7 +8,6 @@ const  initialState={
 
 const usersReducers=(state=initialState,action)=>{
     switch(action.type){
-
         case type.EMPLOYEE_GET:
         return{
             ...state,
@@ -25,6 +24,16 @@ const usersReducers=(state=initialState,action)=>{
                     ...state,
                     loading:false
                 };
+                case type.EMPLOYEE_SINGLE_SELECT:
+                    return{
+                        ...state,
+                        loading:false
+                    };
+                case type.EMPLOYEE_UPDATE:
+                    return{
+                        ...state,
+                        loading:false
+                    };
         default:
             return state;
     }

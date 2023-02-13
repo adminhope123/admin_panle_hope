@@ -14,6 +14,15 @@ const deleteEmployee=()=>({
     type:type.EMPLOYEE_DELETE,
 })
 
+const selectSingleEmployee=(users)=>({
+    type:type.EMPLOYEE_SINGLE_SELECT,
+})
+
+const updateEmployee=()=>({
+    type:type.EMPLOYEE_UPDATE,
+})
+
+
 export const getEmployeeApi=()=>{
     const url="http://localhost:3004/employee"
     return function (dispatch){
@@ -21,7 +30,7 @@ export const getEmployeeApi=()=>{
             .then((resp)=>{
             console.log("resp",resp)
             dispatch(getEmployee(resp.data))
-            dispatch(deleteEmployee())
+            // dispatch(deleteEmployee())
         })
         .catch((error)=>console.log("error",error))
     }
@@ -31,14 +40,15 @@ export const addEmployeeApi=(user)=>{
     return function (dispatch){
             axios.post(url,user)
             .then((resp)=>{
-            console.log("resp",resp)
+            console.log("resp",resp.data)
             dispatch(addEmployee())
+            dispatch(getEmployeeApi())
         })
         .catch((error)=>console.log("error",error))
     }
 }
-export const deleteEmployeeApi=(id)=>{
-    const dataaa=`http://localhost:3004/employee/${id}`
+export const deleteEmployeeApi=(employeeEditId)=>{
+    const dataaa=`http://localhost:3004/employee/${employeeEditId}`
     return function (dispatch){ 
             axios.delete(dataaa)
             .then((resp)=>{
@@ -48,6 +58,30 @@ export const deleteEmployeeApi=(id)=>{
         })
         .catch((error)=>console.log("error",error))
     }
+}    
+export const selectSingleEmployeeApi=(employeeEditId)=>{
+    const dataaa=`http://localhost:3004/employee/${employeeEditId}`
+    return function (dispatch){ 
+            axios.get(dataaa)
+            .then((resp)=>{
+            console.log("resp",resp)
+            dispatch(selectSingleEmployee(resp.data))
+        })
+        .catch((error)=>console.log("error",error))
+    }
 }
 
+export const updateEmployeeApi=(users,employeeEditId)=>{
+    const dataaa=(`http://localhost:3004/employee/${employeeEditId}`,users)
+    console.log("users",users)
+    console.log(dataaa)
+    return function (dispatch){ 
+            axios.put(dataaa)
+            .then((resp)=>{
+            console.log("resp",resp)    
+            dispatch(updateEmployee(resp.data))
+        })    
+        .catch((error)=>console.log("error",error))
+    }    
+}    
 
