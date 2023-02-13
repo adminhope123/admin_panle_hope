@@ -35,6 +35,7 @@ export const getEmployeeApi=()=>{
 }
 export const addEmployeeApi=(user)=>{
     const url="http://localhost:3004/employee"
+    console.log(user,"rrrrrrrrrr")
     return function (dispatch){
             axios.post(url,user)
             .then((resp)=>{
@@ -57,18 +58,6 @@ export const deleteEmployeeApi=(employeeEditId)=>{
         .catch((error)=>console.log("error",error))
     }
 }    
-export const selectSingleEmployeeApi=(employeeEditId)=>{
-    const dataaa=`http://localhost:3004/employee/${employeeEditId}`
-    return function (dispatch){ 
-            axios.get(dataaa)
-            .then((resp)=>{
-            console.log("resp",resp)
-            dispatch(selectSingleEmployee(resp.data))
-        })
-        .catch((error)=>console.log("error",error))
-    }
-}
-
 export const updateEmployeeApi=(users,employeeEditId)=>{
     const dataaa=(`http://localhost:3004/employee/${employeeEditId}`,users)
     console.log("users",users)
@@ -82,14 +71,3 @@ export const updateEmployeeApi=(users,employeeEditId)=>{
         .catch((error)=>console.log("error",error))
     }    
 }    
-
-  return function (dispatch) {
-    axios
-      .get(url)
-      .then((resp) => {
-        console.log('resp', resp);
-        dispatch(getEmployee(resp.data));
-        dispatch(deleteEmployee());
-      })
-      .catch((error) => console.log('error', error));
-  };

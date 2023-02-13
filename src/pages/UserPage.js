@@ -35,10 +35,9 @@ import {
 } from '@mui/material';
 // components
 import Visibility from '@mui/icons-material/Visibility';
-import { useParams } from 'react-router-dom';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useDispatch, useSelector } from 'react-redux';
-import { addEmployeeApi, deleteEmployeeApi, getEmployeeApi, selectSingleEmployeeApi, updateEmployeeApi } from '../Redux/actions';
+import { addEmployeeApi, deleteEmployeeApi, getEmployeeApi } from '../Redux/actions';
 import Label from '../components/label';
 import Iconify from '../components/iconify';
 import Scrollbar from '../components/scrollbar';
@@ -140,8 +139,8 @@ export default function UserPage() {
     address: '',
     salary: '',
   });
-  const {userName,email,mobileNumber,role,password,address,salary}=employeeDataForm;
-   const {users}=useSelector(state=>state?.data)
+  const { userName, email, mobileNumber, role, password, address, salary } = employeeDataForm;
+  const { users } = useSelector((state) => state.data);
   const hadnleEmployeeOnchange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -156,14 +155,17 @@ export default function UserPage() {
     console.log('employeeDataForm', employeeDataForm);
 
     const data = users.filter((value) => {
-      return value.userName === employeeDataForm.userName && value.email === employeeDataForm.email;
+       return (value.userName === employeeDataForm.userName && value.email === employeeDataForm.email);
     });
-    if (data.legnth === 0) {
-      console.log(data, 'dataaaaaa');
-      dispatch(addEmployeeApi(employeeDataForm, users));
-    } else {
+    
+console.log(data.legnth === 0,"aaaaaaaaaaaaaaaa")
+    if (data.legnth === 0  ) {
       setAllReadyDataAlert(true);
       console.log('name');
+    } else {
+      console.log(data, 'dataaaaaa');
+      dispatch(addEmployeeApi(employeeDataForm, users));
+     
     }
   };
   const allReadyDataAlertFunctionClose = (event, reason) => {
@@ -212,13 +214,6 @@ export default function UserPage() {
     //   });
     // });
   };
-  }
-    const deleteEmployeeAlertFunctionClose = (event, reason) => {
-      if (reason === 'clickaway') {
-        return;
-      }
-      setEmployeeDeleteAlert(false);
-};
   const validate = (values) => {
     const error = {};
     const emailRegex = '^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$';
@@ -279,10 +274,9 @@ export default function UserPage() {
 
   const employeeGetApiFuction = () => {
     fetch('http://localhost:3004/employee')
-    .then((res) => res.json())
-    .then((response) => setGetEmployeeData(response));
+      .then((res) => res.json())
+      .then((response) => setGetEmployeeData(response));
   };
-
   const employeeDeleteApiFunction = (id) => {
     console.log('employeeEditId', employeeEditId.id);
 
@@ -296,29 +290,21 @@ export default function UserPage() {
       //     setEmployeeDeleteAlert(true)
       //   })
       // })
-    console.log("id",id)
-    if(employeeEditId){
-      if(id){
-      dispatch(deleteEmployeeApi(employeeEditId?.id))
-    }
     }
   };
-
   const hadnleEditEmployeeOnchange = (e) => {
+
     if (e) {
-      const name = e?.target.name;
-      const value = e?.target.value;
-      setEmployeeEditForm({ ...employeeEditId, [name]: value });
+      // const name = e.target.name;
+      // const value = e.target.name;
+      setEmployeeEditForm({ ...employeeEditId, [e.target.name]: e.target.name });
     }
   };
-useEffect(() => {
-
-}, [users])
 
   const hadnleEditEmployeeSubmit = (e) => {
     e.preventDefault();
     setIsSubmit(true);
-    // setErrorForm(validate(employeeEditForm));
+    setErrorForm(validate(employeeEditForm));
     console.log('employeeEditForm', employeeEditForm);
     editEmployeeData();
   };
@@ -342,18 +328,7 @@ useEffect(() => {
         setEmployeeEditAlert(true);
       });
     }
-    if(users){
-      setEmployeeEditForm({...users})
-    }
-    dispatch(updateEmployeeApi(employeeEditForm,employeeEditId?.id))
-  
   };
-
-useEffect(() => {
-  dispatch(getEmployeeApi())
-  employeeGetApiFuction();
-}, [])
-
   const handleNewUserModelClose = () => {
     setNewUserModel(false);
     setAllReadyDataAlert(false);
@@ -367,12 +342,8 @@ useEffect(() => {
     setEmployeeEditModel(false);
   };
 
-  const handleEditModelOpen = (id) => {
+  const handleEditModelOpen = (item) => {
     setEmployeeEditModel(true);
-    console.log(id)
-      if(employeeEditId){
-      dispatch(selectSingleEmployeeApi(employeeEditId?.id))
-    }
   };
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
@@ -381,6 +352,7 @@ useEffect(() => {
   const handleCloseMenu = () => {
     setOpen(null);
   };
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -411,6 +383,15 @@ useEffect(() => {
     setSelected(newSelected);
   };
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setPage(0);
+    setRowsPerPage(parseInt(event.target.value, 10));
+  };
+
   const handleFilterByName = (event) => {
     setPage(0);
     setFilterName(event.target.value);
@@ -419,7 +400,6 @@ useEffect(() => {
   const handleEmployeeClickId = (item) => {
     if (item) {
       setEmployeeEditId(item);
-      console.log("item",item)
     }
   };
  
@@ -509,15 +489,15 @@ useEffect(() => {
                                   },
                                 }}
                               >
-                                <MenuItem onClick={() => handleEditModelOpen(item?.id)}>
+                                <MenuItem onClick={() => handleEditModelOpen(item)}>
                                   <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
                                   Edit
                                 </MenuItem>
+
                                 <MenuItem
                                   sx={{ color: 'error.main' }}
                                   onClick={() => employeeDeleteApiFunction(item.id)}
                                 >
-                                <MenuItem sx={{ color: 'error.main' }} onClick={()=>employeeDeleteApiFunction(item?.id)}>
                                   <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
                                   Delete
                                 </MenuItem>
@@ -680,7 +660,7 @@ useEffect(() => {
                       type="text"
                       name="userName"
                       error={errorForm?.userName}
-                      defaultValue={employeeEditId?.userName ||""}
+                      defaultValue={employeeEditId?.userName}
                       onChange={hadnleEditEmployeeOnchange}
                     />
                     <p className="employee-error-text">{errorForm.userName}</p>
@@ -691,7 +671,7 @@ useEffect(() => {
                       name="role"
                       type="text"
                       error={errorForm?.role}
-                      defaultValue={employeeEditId?.role ||""}
+                      defaultValue={employeeEditId?.role}
                       onChange={hadnleEditEmployeeOnchange}
                     />
                     <p className="employee-error-text">{errorForm.role}</p>
@@ -702,7 +682,7 @@ useEffect(() => {
                       type="number"
                       name="mobileNumber"
                       error={errorForm?.mobileNumber}
-                      defaultValue={employeeEditId?.mobileNumber ||""}
+                      defaultValue={employeeEditId?.mobileNumber}
                       onChange={hadnleEditEmployeeOnchange}
                     />
                     <p className="employee-error-text">{errorForm.mobileNumber}</p>
@@ -713,7 +693,7 @@ useEffect(() => {
                       name="email"
                       type="text"
                       error={errorForm?.email}
-                      defaultValue={employeeEditId?.email ||""}
+                      defaultValue={employeeEditId?.email}
                       onChange={hadnleEditEmployeeOnchange}
                     />
                     <p className="employee-error-text">{errorForm.email}</p>
@@ -724,7 +704,7 @@ useEffect(() => {
                       name="text"
                       type="text"
                       error={errorForm?.address}
-                      defaultValue={employeeEditId?.address ||""}
+                      defaultValue={employeeEditId?.address}
                       onChange={hadnleEditEmployeeOnchange}
                     />
                     <p className="employee-error-text">{errorForm.address}</p>
@@ -735,7 +715,7 @@ useEffect(() => {
                       name="salary"
                       type="number"
                       error={errorForm?.salary}
-                      defaultValue={employeeEditId?.salary ||""}
+                      defaultValue={employeeEditId?.salary}
                       onChange={hadnleEditEmployeeOnchange}
                     />
                     <p className="employee-error-text">{errorForm.salary}</p>
@@ -746,7 +726,7 @@ useEffect(() => {
                       error={errorForm?.password}
                       name="password"
                       type="text"
-                      defaultValue={employeeEditId?.password ||""}
+                      defaultValue={employeeEditId?.password}
                       onChange={hadnleEditEmployeeOnchange}
                     />
                     <p className="employee-error-text">{errorForm.password}</p>
