@@ -33,11 +33,12 @@ import {
   MuiAlert,
   Alert,
 } from '@mui/material';
+
 // components
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useDispatch, useSelector } from 'react-redux';
-import { addEmployeeApi, deleteEmployeeApi, getEmployeeApi } from '../Redux/actions';
+import { addEmployeeApi, deleteEmployeeApi, getEmployeeApi, updateEmployeeApi } from '../Redux/actions';
 import Label from '../components/label';
 import Iconify from '../components/iconify';
 import Scrollbar from '../components/scrollbar';
@@ -102,8 +103,10 @@ function applySortFilter(array, comparator, query) {
 
 export default function UserPage() {
   const dispatch = useDispatch();
+  const [image, setImage] = useState();
   const [open, setOpen] = useState(null);
-  const [apicall, setApicall] = useState(false);
+  const [apicall, setApicall] = useState(0);
+  const [validation, setValidation] = useState({});
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
@@ -139,35 +142,15 @@ export default function UserPage() {
     address: '',
     salary: '',
   });
+
   const { userName, email, mobileNumber, role, password, address, salary } = employeeDataForm;
   const { users } = useSelector((state) => state.data);
   const hadnleEmployeeOnchange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-    setEmployeeForm({ ...employeeDataForm, [name]: value });
+    setEmployeeForm({ ...employeeDataForm, [e.target.name]: e.target.value });
   };
-  const hadnleEmployeeSubmit = (e) => {
-    e.preventDefault();
-    setIsSubmit(true);
-    setErrorForm(validate(employeeDataForm));
 
-    console.log('isSubmit', isSubmit);
-    console.log('employeeDataForm', employeeDataForm);
-
-    const data = users.filter((value) => {
-       return (value.userName === employeeDataForm.userName && value.email === employeeDataForm.email);
-    });
-    
-console.log(data.legnth === 0,"aaaaaaaaaaaaaaaa")
-    if (data.legnth === 0  ) {
-      setAllReadyDataAlert(true);
-      console.log('name');
-    } else {
-      console.log(data, 'dataaaaaa');
-      dispatch(addEmployeeApi(employeeDataForm, users));
-     
-    }
-  };
   const allReadyDataAlertFunctionClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -215,57 +198,97 @@ console.log(data.legnth === 0,"aaaaaaaaaaaaaaaa")
     // });
   };
   const validate = (values) => {
+    console.log('welcome to validation');
     const error = {};
     const emailRegex = '^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$';
     if (!values.userName) {
       error.userName = 'user Name is required';
-      setApicall(true);
+      setApicall(1);
+      setApicall(1);
+      console.log(apicall, 'change api');
+      console.log('aaaa');
     } else if (values.userName.length < 3) {
       error.userName = 'user Name  more than 3 characters';
-      setApicall(true);
     } else if (values.userName.length > 8) {
       error.userName = 'user Name cannot exceed more than 5 characters';
-      setApicall(true);
+    } else {
+      setApicall(0);
     }
+
     if (!values.password) {
       error.password = 'password is required';
-      setApicall(true);
     } else if (values.password.length < 3) {
       error.password = 'password  more than 3 characters';
-      setApicall(true);
     }
     if (values.userName?.length > 8) {
       error.userName = 'user Name cannot exceed more than 5 characters';
-      setApicall(true);
     }
     if (!values.role) {
       error.role = 'role is required';
-      setApicall(true);
     } else if (values.role.length < 3) {
       error.role = 'role  more than 3 characters';
-      setApicall(true);
     } else if (values.role.length > 8) {
       error.role = 'role cannot exceed more than 5 characters';
-      setApicall(true);
     }
     if (!values.email) {
       error.email = 'Enter Email';
-      setApicall(true);
     } else if (!emailRegex && emailRegex?.test(values.email)) {
       error.email = 'This is not a valid email format!';
-      setApicall(true);
     }
     if (!values.mobileNumber) {
       error.mobileNumber = 'phoneNumber is required';
-      setApicall(true);
     } else if (values.mobileNumber.length < 10) {
       error.mobileNumber = 'phoneNumber  more than 10 characters';
-      setApicall(true);
     } else if (values.mobileNumber.length > 10) {
       error.mobileNumber = 'phoneNumber cannot exceed more than 10 characters';
-      setApicall(true);
     }
+
+    setValidation(error);
+    console.log(validation, 'nnnnnnnnnnnnnnnnnnnnnnnnn')
+    console.log("dddd")
     return error;
+  };
+  const hadnleEmployeeSubmit = (e) => {
+    e.preventDefault();
+    setIsSubmit(true);
+    setErrorForm(validate(employeeDataForm));
+
+    console.log('isSubmit', isSubmit);
+    console.log('employeeDataForm', employeeDataForm);
+
+    const data = users.filter((value) => {
+      return value.userName === employeeDataForm.userName && value.email === employeeDataForm.email;
+    });
+
+    // if (data.legnth === 0) {
+    //   setAllReadyDataAlert(true);
+    //   console.log('name');
+    // } else {
+    //   console.log('NO ENY DATA SEM');
+    //   if (apicall === false) {
+    //     console.log('eny validation');
+    //   } else {
+    //     dispatch(addEmployeeApi(employeeDataForm, users));
+    //     setApicall(true)
+    //   }
+    // }
+
+    const formData = new FormData();
+    formData.append('image', image);
+    //  console.log(employeeDataForm,"aaa")
+    //  console.log(users,"bbb")
+    //  console.log(image,"cccc")
+    const createObjectImg = { userImage: image };
+
+    const employee = Object.assign(createObjectImg, employeeDataForm);
+
+    if (data.length === 0) {
+      dispatch(addEmployeeApi(employee, users));
+
+      console.log('yes');
+    } else {
+      console.log('nooo');
+    }
   };
 
   useEffect(() => {
@@ -293,11 +316,9 @@ console.log(data.legnth === 0,"aaaaaaaaaaaaaaaa")
     }
   };
   const hadnleEditEmployeeOnchange = (e) => {
-
     if (e) {
-      // const name = e.target.name;
-      // const value = e.target.name;
-      setEmployeeEditForm({ ...employeeEditId, [e.target.name]: e.target.name });
+      const { name, value } = e.target;
+      setEmployeeEditForm({ ...employeeEditId, [name]: value });
     }
   };
 
@@ -308,6 +329,7 @@ console.log(data.legnth === 0,"aaaaaaaaaaaaaaaa")
     console.log('employeeEditForm', employeeEditForm);
     editEmployeeData();
   };
+
   useEffect(() => {
     dispatch(getEmployeeApi());
   }, []);
@@ -402,12 +424,20 @@ console.log(data.legnth === 0,"aaaaaaaaaaaaaaaa")
       setEmployeeEditId(item);
     }
   };
- 
+  function inputimage(e) {
+    console.log(e.target.files, 'image2');
+    setImage(e.target.files[0]);
+  }
+
+  const sub = () => {
+    dispatch(updateEmployeeApi(employeeEditForm, employeeEditForm.id));
+  };
+
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
 
   const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
   const isNotFound = !filteredUsers.length && !!filterName;
-  
+
   return (
     <>
       <div className="employee-page">
@@ -556,6 +586,8 @@ console.log(data.legnth === 0,"aaaaaaaaaaaaaaaa")
             <Box sx={style}>
               <div className="employee-new-user">
                 <form onSubmit={hadnleEmployeeSubmit}>
+                  <input type="file" accept="image/png , image/jepg,.txt,.doc" onChange={inputimage} />
+
                   <FormControl>
                     <TextField
                       label="User Name"
@@ -736,7 +768,7 @@ console.log(data.legnth === 0,"aaaaaaaaaaaaaaaa")
                     startIcon={<Iconify icon="eva:plus-fill" />}
                     type="submit"
                     className="add-employee"
-               
+                    onClick={sub}
                   >
                     Edit Employee
                   </Button>
