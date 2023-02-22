@@ -14,6 +14,12 @@ const usersReducers=(state=initialState,action)=>{
             users:action.payload,
             loading:false
         };
+        case type.ADMIN_PANLE_DATA:
+            return{
+                ...state,
+                users:action.payload,
+                loading:false
+            };
         case type.EMPLOYEE_ADD:
             return{
                 ...state,

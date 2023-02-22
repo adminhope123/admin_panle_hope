@@ -26,7 +26,7 @@ export default function DashboardAppPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard | Minimal UI </title>
+        <title> Dashboard |  Hope Admin Panle </title>
       </Helmet>
 
       <Container maxWidth="xl">

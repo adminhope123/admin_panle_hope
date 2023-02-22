@@ -33,6 +33,29 @@
     height: 300px !important;
     left:36% !important;
 }
+.login-logo {
+    width: 218px;
+    height: auto;
+    position: absolute;
+    top: 16%;
+    left: 75px;
+}
+
+.logo-icon-login-form {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 87px;
+}
+
+.logo-icon-login-form img {
+    width: 112px;
+}
+.login-error-text {
+    margin: 0px !important;
+    font-size: 13px;
+    color: red;
+    margin-top: 0 !important;
+}
 .add-employee-alert  .MuiSnackbar-root{
     width: 386px !important;
     height: 300px !important;
@@ -45,4 +68,38 @@
 }
 .add-employee-alert svg{
     color:white;
+}
+.employee-new-user .employee-img-upload{
+
+}
+.employee-new-user .employee-img-upload input{
+    color: white;
+}
+.employee-new-user .employee-img-upload input #file-upload-button{
+    background-color: transparent;
+}
+.employee-img-upload .MuiButtonBase-root {
+    background-color: transparent;
+    box-shadow: none;
+    padding: 0px;
+    border-radius: 50px;
+    border: 1px solid #162b4c;
+    margin-bottom: 14px;
+    margin-top: -18px;
+    padding: 9px;
+}
+.employee-img-upload .MuiButtonBase-root img{
+    width: 80px;
+}
+.employee-img-upload h6{
+    margin: 0px;
+    margin-bottom: 10px;
+    margin-left: 11px;
+    margin-top: -7px;
+    font-size: 14px;
+    font-weight: normal;
+}
+.employee-img-upload .employee-new-user form div{
+    display: flex;
+    flex-direction: column;
 }

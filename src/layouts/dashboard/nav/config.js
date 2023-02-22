@@ -1,5 +1,6 @@
 // component
 import SvgColor from '../../../components/svg-color';
+import EventIcon from '@mui/icons-material/Event';
 
 // ----------------------------------------------------------------------
 
@@ -12,15 +13,26 @@ const navConfig = [
     icon: icon('ic_analytics'),
   },
   {
-    title: 'user',
-    path: '/dashboard/user',
+    title: 'Employee',
+    path: '/dashboard/employee',
     icon: icon('ic_user'),
+  },
+  {
+    title: 'Employee Attendance',
+    path: '/dashboard/employeeAttendance',
+    icon: icon('ic_cart'),
+  },
+  {
+    title: 'event',
+    path: '/dashboard/event',
+    icon: <EventIcon/>,
   },
   {
     title: 'product',
     path: '/dashboard/products',
     icon: icon('ic_cart'),
   },
+  
   {
     title: 'blog',
     path: '/dashboard/blog',

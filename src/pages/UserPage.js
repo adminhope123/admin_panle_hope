@@ -45,6 +45,7 @@ import Scrollbar from '../components/scrollbar';
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 // mock
 import './style.css';
+import uploadImgIcon from './uploadImg.png'
 import USERLIST from '../_mock/user';
 
 // ----------------------------------------------------------------------
@@ -120,6 +121,8 @@ export default function UserPage() {
   const [isSubmit, setIsSubmit] = useState(false);
   const [employeeGetData, setGetEmployeeData] = useState();
   const [employeeEditModel, setEmployeeEditModel] = useState();
+  const [employeeImgUpload,setEmployeeImgUpload]=useState()
+  const [preview, setPreview] = useState()
   const [employeeEditId, setEmployeeEditId] = useState();
   const [employeeDataForm, setEmployeeForm] = useState({
     userName: '',
@@ -139,7 +142,7 @@ export default function UserPage() {
     address: '',
     salary: '',
   });
-  const { userName, email, mobileNumber, role, password, address, salary } = employeeDataForm;
+  const { userName, email, mobileNumber, role, password, address, salary,userImg } = employeeDataForm;
   const { users } = useSelector((state) => state.data);
   const hadnleEmployeeOnchange = (e) => {
     const name = e.target.name;
@@ -150,22 +153,23 @@ export default function UserPage() {
     e.preventDefault();
     setIsSubmit(true);
     setErrorForm(validate(employeeDataForm));
-
+    setErrorForm(validate(employeeDataForm));
     console.log('isSubmit', isSubmit);
-    console.log('employeeDataForm', employeeDataForm);
-
     const data = users.filter((value) => {
        return (value.userName === employeeDataForm.userName && value.email === employeeDataForm.email);
     });
     
-console.log(data.legnth === 0,"aaaaaaaaaaaaaaaa")
     if (data.legnth === 0  ) {
       setAllReadyDataAlert(true);
       console.log('name');
     } else {
       console.log(data, 'dataaaaaa');
-      dispatch(addEmployeeApi(employeeDataForm, users));
-     
+      const formData = new FormData();
+   formData.append("employeeImgUpload",employeeImgUpload)
+      console.log("employeeImgUpload",employeeImgUpload)
+      const employeeAddData={...employeeDataForm,...employeeImgUpload }
+      console.log("employeeAddData",employeeAddData)
+        dispatch(addEmployeeApi(employeeAddData, users));
     }
   };
   const allReadyDataAlertFunctionClose = (event, reason) => {
@@ -195,6 +199,7 @@ console.log(data.legnth === 0,"aaaaaaaaaaaaaaaa")
 
     setEmployeeDeleteAlert(false);
   };
+
   const employeeDataApi = () => {
     if (Object.keys(errorForm).length === 0) {
       setNewUserModel(false);
@@ -267,6 +272,7 @@ console.log(data.legnth === 0,"aaaaaaaaaaaaaaaa")
     }
     return error;
   };
+ 
 
   useEffect(() => {
     employeeGetApiFuction();
@@ -292,6 +298,16 @@ console.log(data.legnth === 0,"aaaaaaaaaaaaaaaa")
       // })
     }
   };
+  useEffect(() => {
+    // create the preview
+    console.log("employeeImgUpload",)
+    if(employeeImgUpload){
+
+      const objectUrl = window.URL.createObjectURL(employeeImgUpload)
+      setPreview(objectUrl)
+    }
+ 
+ }, [employeeImgUpload])
   const hadnleEditEmployeeOnchange = (e) => {
 
     if (e) {
@@ -306,29 +322,11 @@ console.log(data.legnth === 0,"aaaaaaaaaaaaaaaa")
     setIsSubmit(true);
     setErrorForm(validate(employeeEditForm));
     console.log('employeeEditForm', employeeEditForm);
-    editEmployeeData();
   };
   useEffect(() => {
     dispatch(getEmployeeApi());
   }, []);
 
-  const editEmployeeData = () => {
-    console.log('employeeEditForm', employeeEditForm);
-    console.log(employeeEditId, 'n22222');
-    if (employeeEditForm) {
-      fetch(`http://localhost:3004/employee/${employeeEditId?.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: JSON.stringify(employeeEditForm),
-      }).then((res) => {
-        console.log('res', res);
-        setEmployeeEditAlert(true);
-      });
-    }
-  };
   const handleNewUserModelClose = () => {
     setNewUserModel(false);
     setAllReadyDataAlert(false);
@@ -412,7 +410,7 @@ console.log(data.legnth === 0,"aaaaaaaaaaaaaaaa")
     <>
       <div className="employee-page">
         <Helmet>
-          <title> User | Minimal UI </title>
+          <title> User |  Hope Admin Panle </title>
         </Helmet>
 
         <Container>
@@ -556,6 +554,22 @@ console.log(data.legnth === 0,"aaaaaaaaaaaaaaaa")
             <Box sx={style}>
               <div className="employee-new-user">
                 <form onSubmit={hadnleEmployeeSubmit}>
+                  <div className='employee-img-upload'>
+                    <>
+                    <Stack direction="row" alignItems="center" spacing={2}>
+                        <Button variant="contained" component="label">
+                        <img src={uploadImgIcon} alt='uploadImg'/>
+                   
+                       <input hidden accept="image/*" multiple type="file" onChange={(event) =>setEmployeeImgUpload(event.target.files[0])}/>
+                     </Button>
+                      
+                    </Stack>
+                       <h6>Upload Img</h6>
+                              <img src={preview} alt="employee-img"/>
+                    </>
+                  </div>
+                  
+                     <p className="employee-error-text">{errorForm.employeeImgUpload}</p>
                   <FormControl>
                     <TextField
                       label="User Name"

@@ -7,6 +7,12 @@ const getEmployee = (users) => ({
   payload: users,
 });
 
+const getAddminPanle = (users) => ({
+    type: type.ADMIN_PANLE_DATA,
+    payload: users,
+  });
+  
+
 const addEmployee = () => ({
   type: type.EMPLOYEE_ADD,
 });
@@ -20,6 +26,18 @@ const updateEmployee=()=>({
     type:type.EMPLOYEE_UPDATE,
 })
 
+export const getAddminPanleData=()=>{
+    const url="http://localhost:3004/adminPanleLogin"
+    return function (dispatch){
+            axios.get(url)
+            .then((resp)=>{
+            console.log("resp",resp)
+            dispatch(getAddminPanle(resp.data))
+            // dispatch(deleteEmployee())
+        })
+        .catch((error)=>console.log("error",error))
+    }
+}
 
 export const getEmployeeApi=()=>{
     const url="http://localhost:3004/employee"

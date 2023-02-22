@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 // @mui
 import { styled } from '@mui/material/styles';
@@ -5,11 +6,12 @@ import { Link, Container, Typography, Divider, Stack, Button } from '@mui/materi
 // hooks
 import useResponsive from '../hooks/useResponsive';
 // components
-import Logo from '../components/logo';
+import Logo from './logo1.png';
+import './style.css'
 import Iconify from '../components/iconify';
 // sections
 import { LoginForm } from '../sections/auth/login';
-
+import LogoIcon  from './HopeIcon.png'
 // ----------------------------------------------------------------------
 
 const StyledRoot = styled('div')(({ theme }) => ({
@@ -40,26 +42,23 @@ const StyledContent = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
+
 export default function LoginPage() {
   const mdUp = useResponsive('up', 'md');
-
+ 
   return (
     <>
       <Helmet>
-        <title> Login | Minimal UI </title>
+        <title> Login |  Hope Admin Panle </title>
       </Helmet>
 
       <StyledRoot>
-        <Logo
-          sx={{
-            position: 'fixed',
-            top: { xs: 16, sm: 24, md: 40 },
-            left: { xs: 16, sm: 24, md: 40 },
-          }}
-        />
-
+    
         {mdUp && (
           <StyledSection>
+    <div className='login-logo'>
+         <img src={Logo} />
+          </div>
             <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
               Hi, Welcome Back
             </Typography>
@@ -69,16 +68,14 @@ export default function LoginPage() {
 
         <Container maxWidth="sm">
           <StyledContent>
-            <Typography variant="h4" gutterBottom>
-              Sign in to Minimal
+            <div className='logo-icon-login-form'>
+          <img src={LogoIcon}/>
+            </div>
+            <Typography variant="h4" gutterBottom sx={{marginTop:'-54px',marginBottom: '32px'}}>
+              Sign in to   Hope Admin Panle
             </Typography>
 
-            <Typography variant="body2" sx={{ mb: 5 }}>
-              Don’t have an account? {''}
-              <Link variant="subtitle2">Get started</Link>
-            </Typography>
-
-            <Stack direction="row" spacing={2}>
+            {/* <Stack direction="row" spacing={2}>
               <Button fullWidth size="large" color="inherit" variant="outlined">
                 <Iconify icon="eva:google-fill" color="#DF3E30" width={22} height={22} />
               </Button>
@@ -96,7 +93,7 @@ export default function LoginPage() {
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                 OR
               </Typography>
-            </Divider>
+            </Divider> */}
 
             <LoginForm />
           </StyledContent>
