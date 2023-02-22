@@ -40,11 +40,11 @@ export const getEmployeeApi = () => {
       .catch((error) => console.log('error', error));
   };
 };
-export const addEmployeeApi = (user) => {
+export const addEmployeeApi = (users) => {
   const url = 'http://localhost:3004/employee';
   return function (dispatch) {
     axios
-      .post(url, user)
+      .post(url, users)
       .then((resp) => {
         console.log('resp', resp.data);
         dispatch(addEmployee());

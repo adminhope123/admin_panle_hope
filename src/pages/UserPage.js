@@ -104,7 +104,7 @@ function applySortFilter(array, comparator, query) {
 
 export default function UserPage() {
   const dispatch = useDispatch();
-  const [image, setImage] = useState();
+  const [imageDataData, setImageDataData] = useState();
   const [open, setOpen] = useState(null);
   const [apicall, setApicall] = useState(0);
   const [validation, setValidation] = useState({});
@@ -269,10 +269,9 @@ export default function UserPage() {
     e.preventDefault();
     setIsSubmit(true);
     setErrorForm(validate(employeeDataForm));
-
+       
     console.log('isSubmit', isSubmit);
     console.log('employeeDataForm', employeeDataForm);
-
     const data = users.filter((value) => {
       return value.userName === employeeDataForm.userName && value.email === employeeDataForm.email;
     });
@@ -289,24 +288,31 @@ export default function UserPage() {
     //     setApicall(true)
     //   }
     // }
+    const formDataa = new FormData();
+        formDataa.append("file", imageDataData.file);
+        console.log("formData",formDataa);
+    let formData = new FormData();
+    formData.append("image", imageDataData);
 
-    const formData = new FormData();
-    formData.append('image', image);
     //  console.log(employeeDataForm,"aaa")
     //  console.log(users,"bbb")
     //  console.log(image,"cccc")
-    const createObjectImg = { userImage: image };
-
-    const employee = Object.assign(createObjectImg, employeeDataForm);
-
-    if (data.length === 0) {
-      dispatch(addEmployeeApi(employee, users));
-
-      console.log('yes');
-    } else {
-      console.log('nooo');
-    }
-  };
+    console.log("formData",formData)
+    const createObjectImg = { "userImage": imageDataData };
+    console.log("")
+    if(createObjectImg){
+      if (data.length ===0) {
+        const employee ={...employeeDataForm,...createObjectImg};
+        console.log("employee",employee)
+        
+        console.log("createObjectImg",createObjectImg)
+      dispatch(addEmployeeApi(employee))
+    console.log('yes');
+  } else {
+    console.log('nooo');
+  }
+};
+}
 
   useEffect(() => {
     employeeGetApiFuction();
@@ -434,8 +440,14 @@ export default function UserPage() {
     }
   };
   function inputimage(e) {
-    console.log(e.target.files, 'image2');
-    setImage(e.target.files[0]);
+    e.preventDefault();
+    if (e.target.files.length) {
+      setImageDataData({
+        preview: URL.createObjectURL(e.target.files[0]),
+        // file: e.target.files[0],
+      });
+    }
+    setPreview(URL.createObjectURL(e.target.files[0]));
   }
 
   const sub = () => {
@@ -485,7 +497,7 @@ export default function UserPage() {
                         users?.map((item, index) => {
                           return (
                             <TableBody>
-                              <TableRow hover key={item?.id} role="checkbox">
+                              <TableRow hover key={item?.index} role="checkbox">
                                 <TableCell padding="checkbox">
                                   <Checkbox />
                                 </TableCell>
@@ -595,8 +607,23 @@ export default function UserPage() {
             <Box sx={style}>
               <div className="employee-new-user">
                 <form onSubmit={hadnleEmployeeSubmit}>
-                  <input type="file" accept="image/png , image/jepg,.txt,.doc" onChange={inputimage} />
-
+                  <div className='employee-img-upload'>
+                  <Stack direction="row" alignItems="center" spacing={2}>
+                  
+                      {
+                        !preview?.length ?  
+                        <Button variant="contained" component="label"  className='upload-img'><img src={uploadImgIcon}/>   
+                          <input hidden   type="file" accept="image/png , image/jepg,.txt,.doc" id='image' name='image'  onChange={inputimage} />
+                        </Button> 
+                        : 
+                        <Button variant="contained" component="label" className='preview-img'>   <img src={preview} />
+                        <input hidden   type="file" accept="image/png , image/jepg,.txt,.doc" id='image' name='image'  onChange={inputimage} />
+                      </Button> 
+                     
+                      }
+                   
+                  </Stack>
+                  </div>
                   <FormControl>
                     <TextField
                       label="User Name"

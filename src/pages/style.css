@@ -78,7 +78,16 @@
 .employee-new-user .employee-img-upload input #file-upload-button{
     background-color: transparent;
 }
-.employee-img-upload .MuiButtonBase-root {
+.employee-new-user .preview-img{
+    background-color: transparent;
+    box-shadow: none;
+    padding: 0px;
+    border-radius: 50px;
+    margin-bottom: 14px;
+    margin-top: -18px;
+    padding: 0px;
+}
+.employee-new-user .upload-img{
     background-color: transparent;
     box-shadow: none;
     padding: 0px;
@@ -88,8 +97,12 @@
     margin-top: -18px;
     padding: 9px;
 }
-.employee-img-upload .MuiButtonBase-root img{
+.employee-new-user .upload-img img{
     width: 80px;
+}
+.employee-img-upload .preview-img img{
+    width: 156px;
+    border-radius: 15px;
 }
 .employee-img-upload h6{
     margin: 0px;
