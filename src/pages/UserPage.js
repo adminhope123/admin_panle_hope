@@ -212,8 +212,8 @@ export default function UserPage() {
       console.log('aaaa');
     } else if (values.userName.length < 3) {
       error.userName = 'user Name  more than 3 characters';
-    } else if (values.userName.length > 8) {
-      error.userName = 'user Name cannot exceed more than 5 characters';
+    } else if (values.userName.length > 10) {
+      error.userName = 'user Name cannot exceed more than 10 characters';
     } else {
       setApicall(0);
     }
@@ -223,15 +223,29 @@ export default function UserPage() {
     } else if (values.password.length < 3) {
       error.password = 'password  more than 3 characters';
     }
-    if (values.userName?.length > 8) {
-      error.userName = 'user Name cannot exceed more than 5 characters';
+    if (values.userName?.length >10) {
+      error.userName = 'user Name cannot exceed more than 10 characters';
     }
     if (!values.role) {
       error.role = 'role is required';
     } else if (values.role.length < 3) {
       error.role = 'role  more than 3 characters';
-    } else if (values.role.length > 8) {
-      error.role = 'role cannot exceed more than 5 characters';
+    } else if (values.role.length >10) {
+      error.role = 'role cannot exceed more than 10 characters';
+    }
+    if (!values.salary) {
+      error.salary = 'salary is required';
+    } else if (values.salary.length < 3) {
+      error.salary = 'salary  more than 3 characters';
+    } else if (values.salary.length >10) {
+      error.salary = 'salary cannot exceed more than 10 characters';
+    }
+    if (!values.address) {
+      error.address = 'address is required';
+    } else if (values.address.length < 3) {
+      error.address = 'address  more than 3 characters';
+    } else if (values.address.length >50) {
+      error.address = 'address cannot exceed more than 50 characters';
     }
     if (!values.email) {
       error.email = 'Enter Email';
@@ -630,24 +644,24 @@ export default function UserPage() {
                   <FormControl>
                     <TextField
                       label="Address"
-                      name="text"
+                      name="address"
                       type="text"
                       error={errorForm?.address}
-                      defaultValue={employeeEditId?.address}
-                      onChange={hadnleEditEmployeeOnchange}
+                      value={address}
+                      onChange={hadnleEmployeeOnchange}
                     />
                     <p className="employee-error-text">{errorForm.address}</p>
-                  </FormControl>
                   <FormControl>
                     <TextField
                       label="Salary"
                       name="salary"
                       type="number"
                       error={errorForm?.salary}
-                      defaultValue={salary}
-                      onChange={hadnleEditEmployeeOnchange}
+                      value={salary}
+                      onChange={hadnleEmployeeOnchange}
                     />
                     <p className="employee-error-text">{errorForm.salary}</p>
+                  </FormControl>
                   </FormControl>
                   <FormControl>
                     <TextField
@@ -728,7 +742,7 @@ export default function UserPage() {
                   <FormControl>
                     <TextField
                       label="Address"
-                      name="text"
+                      name="address"
                       type="text"
                       error={errorForm?.address}
                       defaultValue={employeeEditId?.address}
