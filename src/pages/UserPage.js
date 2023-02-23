@@ -146,7 +146,6 @@ export default function UserPage() {
     salary: '',
   });
   const { userName, email, mobileNumber, role, password, address, salary,userImg } = employeeDataForm;
-
   const { users } = useSelector((state) => state.data);
   const hadnleEmployeeOnchange = (e) => {
     const name = e.target.name;
@@ -288,32 +287,36 @@ export default function UserPage() {
     //     setApicall(true)
     //   }
     // }
-    const formDataa = new FormData();
-        formDataa.append("file", imageDataData.file);
-        console.log("formData",formDataa);
-    let formData = new FormData();
-    formData.append("image", imageDataData);
-
-    //  console.log(employeeDataForm,"aaa")
-    //  console.log(users,"bbb")
-    //  console.log(image,"cccc")
-    console.log("formData",formData)
+//     const formDataa = new FormData();
+//         formDataa.append("file", imageDataData.file);
+//         console.log("formData",formDataa);
+//     let formData = new FormData();
+//     formData.append("image", imageDataData);
+// console.log("formdata",formData)
+//     console.log("formData",formData)
+var formData = new FormData();
+var options = { content: formData };
+console.log("optionsoptions",options);
     const createObjectImg = { "userImage": imageDataData };
-    console.log("")
+    const employee =Object.assign(employeeDataForm,{formData})
+    console.log("daaa",employee)
+    sessionStorage.setItem("daaaa",JSON.stringify(employee))
     if(createObjectImg){
       if (data.length ===0) {
-        const employee ={...employeeDataForm,...createObjectImg};
-        console.log("employee",employee)
-        
-        console.log("createObjectImg",createObjectImg)
-      dispatch(addEmployeeApi(employee))
+        if(imageDataData){
+          const employee =Object.assign(employeeDataForm,{imageDataData})
+          console.log("employee",employee)
+          sessionStorage.setItem("employee",JSON.stringify(employee))
+          const dataGet=JSON.parse(sessionStorage.getItem("employee"))
+          console.log("createObjectImg",createObjectImg)
+        dispatch(addEmployeeApi(dataGet))
+        }
     console.log('yes');
   } else {
     console.log('nooo');
   }
 };
-}
-
+}  
   useEffect(() => {
     employeeGetApiFuction();
   }, []);
@@ -325,29 +328,10 @@ export default function UserPage() {
   };
   const employeeDeleteApiFunction = (id) => {
     console.log('employeeEditId', employeeEditId.id);
-
     if (id) {
       dispatch(deleteEmployeeApi(employeeEditId.id));
-      // fetch(`http://localhost:3004/employee/${employeeEditId?.id}`,{
-      //   method: 'DELETE'
-      // }).then((result)=>{
-      //   result.json().then((resp)=>{
-      //     console.log("resp",resp)
-      //     setEmployeeDeleteAlert(true)
-      //   })
-      // })
     }
   };
-  useEffect(() => {
-    // create the preview
-    console.log("employeeImgUpload",)
-    if(employeeImgUpload){
-
-      const objectUrl = window.URL.createObjectURL(employeeImgUpload)
-      setPreview(objectUrl)
-    }
- 
- }, [employeeImgUpload])
   const hadnleEditEmployeeOnchange = (e) => {
     if (e) {
       const { name, value } = e.target;
@@ -442,10 +426,7 @@ export default function UserPage() {
   function inputimage(e) {
     e.preventDefault();
     if (e.target.files.length) {
-      setImageDataData({
-        preview: URL.createObjectURL(e.target.files[0]),
-        // file: e.target.files[0],
-      });
+      setImageDataData(e.target.files[0]);
     }
     setPreview(URL.createObjectURL(e.target.files[0]));
   }
