@@ -147,7 +147,6 @@ export default function UserPage() {
     salary: '',
   });
   const { userName, email, mobileNumber, role, password, address, salary,userImg } = employeeDataForm;
-
   const { users } = useSelector((state) => state.data);
   const hadnleEmployeeOnchange = (e) => {
     const name = e.target.name;
@@ -310,16 +309,6 @@ export default function UserPage() {
       // })
     }
   };
-  useEffect(() => {
-    // create the preview
-    console.log("employeeImgUpload",)
-    if(employeeImgUpload){
-
-      const objectUrl = window.URL.createObjectURL(employeeImgUpload)
-      setPreview(objectUrl)
-    }
- 
- }, [employeeImgUpload])
   const hadnleEditEmployeeOnchange = (e) => {
     if (e) {
       const { name, value } = e.target;
