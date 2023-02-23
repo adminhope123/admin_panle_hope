@@ -28,10 +28,10 @@ const updateEmployee = () => ({
 });
 
 export const getEmployeeApi = () => {
-  const url = 'http://localhost:3004/employee';
+  const url = 'http://127.0.0.1:8000/api/viewemployee';
   return function (dispatch) {
     axios
-      .get(url)
+      .post(url)
       .then((resp) => {
         console.log('resp', resp);
         dispatch(getEmployee(resp.data));
@@ -41,7 +41,7 @@ export const getEmployeeApi = () => {
   };
 };
 export const addEmployeeApi = (users) => {
-  const url = 'http://localhost:3004/employee';
+  const url = 'http://127.0.0.1:8000/api/employee';
   return function (dispatch) {
     axios
       .post(url, users)
@@ -53,8 +53,8 @@ export const addEmployeeApi = (users) => {
       .catch((error) => console.log('error', error));
   };
 };
-export const deleteEmployeeApi = (employeeEditId) => {
-  const dataaa = `http://localhost:3004/employee/${employeeEditId}`;
+export const deleteEmployeeApi = (employeeEditIdData) => {
+  const dataaa = `http://127.0.0.1:8000/api/deleteemployee/${employeeEditIdData}`;
   return function (dispatch) {
     axios
       .delete(dataaa)
@@ -66,17 +66,15 @@ export const deleteEmployeeApi = (employeeEditId) => {
       .catch((error) => console.log('error', error));
   };
 };
-export const updateEmployeeApi = (users, employeeEditId) => {
-  const dataaa = `http://localhost:3004/employee/${employeeEditId}`;
-  console.log('users', users);
-  console.log(dataaa);
-  return function (dispatch) {
-    axios
-      .put(dataaa)
-      .then((resp) => {
-        console.log('resp', resp);
-        dispatch(updateEmployee(resp.data));
+export const updateEmployeeApi=(user,employeeEditIdData)=>{
+  const url=`http://127.0.0.1:8000/api/updatesaveemployee/${employeeEditIdData}`;
+  return function (dispatch){
+          axios.put(url,user)
+          .then((resp)=>{
+          console.log("resp",resp)
+          dispatch(updateEmployee(resp.data))
+          dispatch(getEmployeeApi())
       })
-      .catch((error) => console.log('error', error));
-  };
-};
+      .catch((error)=>console.log("error",error))
+  }
+}

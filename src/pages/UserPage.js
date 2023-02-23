@@ -66,7 +66,8 @@ const TABLE_HEAD = [
   { id: 'role', label: 'Role', alignRight: false },
   { id: 'email', label: 'Email', alignRight: false },
   { id: 'mobileNumber', label: 'Mobile Number', alignRight: false },
-  { id: 'password', label: 'Password', alignRight: false },
+  { id: 'address', label: 'address', alignRight: false },
+  { id: 'salary', label: 'salary', alignRight: false },
   { id: '', label: '', alignRight: false },
   { id: '', label: '', alignRight: false },
 ];
@@ -269,49 +270,20 @@ export default function UserPage() {
     e.preventDefault();
     setIsSubmit(true);
     setErrorForm(validate(employeeDataForm));
-       
-    console.log('isSubmit', isSubmit);
-    console.log('employeeDataForm', employeeDataForm);
-    const data = users.filter((value) => {
-      return value.userName === employeeDataForm.userName && value.email === employeeDataForm.email;
-    });
+    //    console.log("imageDataData",imageDataData)
+    // console.log('isSubmit', isSubmit);
+    // console.log('employeeDataForm', employeeDataForm);
+    // const data = users.filter((value) => {
+    //   return value.userName === employeeDataForm.userName && value.email === employeeDataForm.email;
+    // });
 
-    // if (data.legnth === 0) {
-    //   setAllReadyDataAlert(true);
-    //   console.log('name');
-    // } else {
-    //   console.log('NO ENY DATA SEM');
-    //   if (apicall === false) {
-    //     console.log('eny validation');
-    //   } else {
-    //     dispatch(addEmployeeApi(employeeDataForm, users));
-    //     setApicall(true)
-    //   }
-    // }
-    const formDataa = new FormData();
-        formDataa.append("file", imageDataData.file);
-        console.log("formData",formDataa);
-    let formData = new FormData();
-    formData.append("image", imageDataData);
-
-    //  console.log(employeeDataForm,"aaa")
-    //  console.log(users,"bbb")
-    //  console.log(image,"cccc")
-    console.log("formData",formData)
-    const createObjectImg = { "userImage": imageDataData };
-    console.log("")
-    if(createObjectImg){
-      if (data.length ===0) {
-        const employee ={...employeeDataForm,...createObjectImg};
-        console.log("employee",employee)
+      // if (data.length ===0) {
         
-        console.log("createObjectImg",createObjectImg)
-      dispatch(addEmployeeApi(employee))
-    console.log('yes');
-  } else {
-    console.log('nooo');
-  }
-};
+      dispatch(addEmployeeApi(employeeDataForm))
+  //   console.log('yes');
+  // } else {
+  //   console.log('nooo');
+  // }
 }
 
   useEffect(() => {
@@ -325,9 +297,9 @@ export default function UserPage() {
   };
   const employeeDeleteApiFunction = (id) => {
     console.log('employeeEditId', employeeEditId.id);
-
+   const employeeEditIdData= employeeEditId?.id
     if (id) {
-      dispatch(deleteEmployeeApi(employeeEditId.id));
+      dispatch(deleteEmployeeApi(employeeEditIdData));
       // fetch(`http://localhost:3004/employee/${employeeEditId?.id}`,{
       //   method: 'DELETE'
       // }).then((result)=>{
@@ -360,6 +332,11 @@ export default function UserPage() {
     setIsSubmit(true);
     setErrorForm(validate(employeeEditForm));
     console.log('employeeEditForm', employeeEditForm);
+    console.log("employeeEditForm",employeeEditForm?.id)
+   const employeeEditIdData=employeeEditId?.id
+    if(employeeEditForm){
+      dispatch(updateEmployeeApi(employeeEditForm,employeeEditIdData));
+    }
   };
 
   useEffect(() => {
@@ -442,16 +419,20 @@ export default function UserPage() {
   function inputimage(e) {
     e.preventDefault();
     if (e.target.files.length) {
-      setImageDataData({
-        preview: URL.createObjectURL(e.target.files[0]),
-        // file: e.target.files[0],
-      });
+      setImageDataData(e.target.files[0]);
+
+      // setImageDataData(
+      //   // preview: URL.createObjectURL(e.target.files[0]),
+      //   // file: e.target.files[0],
+      //   e.target.file[0]
+      // );
     }
+    console.log("imageDataData",imageDataData)
     setPreview(URL.createObjectURL(e.target.files[0]));
   }
 
   const sub = () => {
-    dispatch(updateEmployeeApi(employeeEditForm, employeeEditForm.id));
+
   };
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
@@ -511,7 +492,8 @@ export default function UserPage() {
                                 <TableCell align="center">{item?.role}</TableCell>
                                 <TableCell align="center">{item?.email}</TableCell>
                                 <TableCell align="center">{item?.mobileNumber}</TableCell>
-                                <TableCell align="center">{item?.password}</TableCell>
+                                <TableCell align="center">{item?.address}</TableCell>
+                                <TableCell align="center">{item?.salary}</TableCell>
                                 <TableCell align="right">
                                   <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
                                     <Iconify
@@ -607,7 +589,7 @@ export default function UserPage() {
             <Box sx={style}>
               <div className="employee-new-user">
                 <form onSubmit={hadnleEmployeeSubmit}>
-                  <div className='employee-img-upload'>
+                  {/* <div className='employee-img-upload'>
                   <Stack direction="row" alignItems="center" spacing={2}>
                   
                       {
@@ -623,7 +605,7 @@ export default function UserPage() {
                       }
                    
                   </Stack>
-                  </div>
+                  </div> */}
                   <FormControl>
                     <TextField
                       label="User Name"
