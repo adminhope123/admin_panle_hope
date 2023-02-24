@@ -62,11 +62,11 @@ const style = {
 };
 const TABLE_HEAD = [
   { id: 'img', label: 'Img', alignRight: false },
+  { id: 'E_Id', label: 'Employee Id', alignRight: false },
   { id: 'userName', label: 'User Name', alignRight: false },
   { id: 'role', label: 'Role', alignRight: false },
   { id: 'email', label: 'Email', alignRight: false },
   { id: 'mobileNumber', label: 'Mobile Number', alignRight: false },
-  { id: 'address', label: 'address', alignRight: false },
   { id: 'salary', label: 'salary', alignRight: false },
   { id: '', label: '', alignRight: false },
   { id: '', label: '', alignRight: false },
@@ -134,7 +134,6 @@ export default function UserPage() {
     mobileNumber: '',
     role: '',
     password: '',
-    address: '',
     salary: '',
   });
   const [employeeEditForm, setEmployeeEditForm] = useState({
@@ -143,7 +142,6 @@ export default function UserPage() {
     mobileNumber: '',
     role: '',
     password: '',
-    address: '',
     salary: '',
   });
   const { userName, email, mobileNumber, role, password, address, salary,userImg } = employeeDataForm;
@@ -240,13 +238,6 @@ export default function UserPage() {
     } else if (values.salary.length >10) {
       error.salary = 'salary cannot exceed more than 10 characters';
     }
-    if (!values.address) {
-      error.address = 'address is required';
-    } else if (values.address.length < 3) {
-      error.address = 'address  more than 3 characters';
-    } else if (values.address.length >50) {
-      error.address = 'address cannot exceed more than 50 characters';
-    }
     if (!values.email) {
       error.email = 'Enter Email';
     } else if (!emailRegex && emailRegex?.test(values.email)) {
@@ -278,7 +269,10 @@ export default function UserPage() {
 
       // if (data.length ===0) {
         
-      dispatch(addEmployeeApi(employeeDataForm))
+        if(employeeDataForm){
+        dispatch(addEmployeeApi(employeeDataForm))
+        setNewUserModel(false);
+      }
   //   console.log('yes');
   // } else {
   //   console.log('nooo');
@@ -325,6 +319,7 @@ export default function UserPage() {
    const employeeEditIdData=employeeEditId?.id
     if(employeeEditForm){
       dispatch(updateEmployeeApi(employeeEditForm,employeeEditIdData));
+      setEmployeeEditModel(false);
     }
   };
 
@@ -477,11 +472,11 @@ export default function UserPage() {
                                     <Avatar alt={item?.userName} />
                                   </Stack>
                                 </TableCell>
+                                <TableCell align="center">{item?.E_Id}</TableCell>
                                 <TableCell align="center">{item?.userName}</TableCell>
                                 <TableCell align="center">{item?.role}</TableCell>
                                 <TableCell align="center">{item?.email}</TableCell>
                                 <TableCell align="center">{item?.mobileNumber}</TableCell>
-                                <TableCell align="center">{item?.address}</TableCell>
                                 <TableCell align="center">{item?.salary}</TableCell>
                                 <TableCell align="right">
                                   <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
@@ -641,16 +636,6 @@ export default function UserPage() {
                   </FormControl>
                   <FormControl>
                     <TextField
-                      label="Address"
-                      name="address"
-                      type="text"
-                      error={errorForm?.address}
-                      value={address}
-                      onChange={hadnleEmployeeOnchange}
-                    />
-                    <p className="employee-error-text">{errorForm.address}</p>
-                  <FormControl>
-                    <TextField
                       label="Salary"
                       name="salary"
                       type="number"
@@ -659,7 +644,6 @@ export default function UserPage() {
                       onChange={hadnleEmployeeOnchange}
                     />
                     <p className="employee-error-text">{errorForm.salary}</p>
-                  </FormControl>
                   </FormControl>
                   <FormControl>
                     <TextField
@@ -736,17 +720,6 @@ export default function UserPage() {
                       onChange={hadnleEditEmployeeOnchange}
                     />
                     <p className="employee-error-text">{errorForm.email}</p>
-                  </FormControl>
-                  <FormControl>
-                    <TextField
-                      label="Address"
-                      name="address"
-                      type="text"
-                      error={errorForm?.address}
-                      defaultValue={employeeEditId?.address}
-                      onChange={hadnleEditEmployeeOnchange}
-                    />
-                    <p className="employee-error-text">{errorForm.address}</p>
                   </FormControl>
                   <FormControl>
                     <TextField
