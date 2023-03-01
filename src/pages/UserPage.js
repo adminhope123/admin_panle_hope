@@ -48,6 +48,7 @@ import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 import './style.css';
 import uploadImgIcon from './uploadImg.png'
 import USERLIST from '../_mock/user';
+import axios from 'axios';
 
 // ----------------------------------------------------------------------
 const style = {
@@ -128,7 +129,7 @@ export default function UserPage() {
   const [employeeImgUpload,setEmployeeImgUpload]=useState()
   const [preview, setPreview] = useState()
   const [employeeEditId, setEmployeeEditId] = useState();
-  const [employeeDataForm, setEmployeeForm] = useState({
+  const [employeeDataForm, setEmployeeDataForm] = useState({
     userName: '',
     email: '',
     mobileNumber: '',
@@ -136,6 +137,7 @@ export default function UserPage() {
     password: '',
     salary: '',
   });
+  const [imageUpload,setImageUpload]=useState([])
   const [employeeEditForm, setEmployeeEditForm] = useState({
     userName: '',
     email: '',
@@ -147,10 +149,14 @@ export default function UserPage() {
   const { userName, email, mobileNumber, role, password, address, salary,userImg } = employeeDataForm;
   const { users } = useSelector((state) => state.data);
   const hadnleEmployeeOnchange = (e) => {
+    e.persist()
     const name = e.target.name;
     const value = e.target.value;
-    setEmployeeForm({ ...employeeDataForm, [e.target.name]: e.target.value });
+    setEmployeeDataForm({ ...employeeDataForm, [e.target.name]: e.target.value });
   };
+  const handleImgChange=(e)=>{
+    setImageUpload({image:[e.target.files[0]]})
+  }
   const allReadyDataAlertFunctionClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -268,8 +274,24 @@ export default function UserPage() {
     // });
 
       // if (data.length ===0) {
-        
-        if(employeeDataForm){
+         var formData=new FormData()
+          formData.append('image',imageUpload.image)
+          formData.append('userName',employeeDataForm.userName)
+          formData.append('role',employeeDataForm.role)
+          formData.append('password',employeeDataForm.password)
+          formData.append('email',employeeDataForm.email)
+          formData.append('salary',employeeDataForm.salary)
+          formData.append('mobileNumber',employeeDataForm.mobileNumber)
+          console.log("img",formData)
+             axios.post(`http://127.0.0.1:8000/api/employee`,formData)
+             .then(res=>{
+              if(res.data.status===200){
+                swal("api Called",res.data.message)
+              }else if(res.data.status===422){
+                  swal("api failed")
+              }
+             })
+          if(employeeDataForm){
         dispatch(addEmployeeApi(employeeDataForm))
         setNewUserModel(false);
       }
@@ -590,13 +612,21 @@ export default function UserPage() {
                    
                   </Stack>
                   </div> */}
+                   <FormControl>
+                    <TextField
+                      label="User Name"
+                      type="file"
+                      name="image"
+                      onChange={handleImgChange}
+                    />
+                    </FormControl>
                   <FormControl>
                     <TextField
                       label="User Name"
                       type="text"
                       name="userName"
                       error={errorForm?.userName}
-                      value={userName}
+                      value={employeeDataForm.userName}
                       onChange={hadnleEmployeeOnchange}
                     />
                     <p className="employee-error-text">{errorForm.userName}</p>
@@ -607,7 +637,7 @@ export default function UserPage() {
                       name="role"
                       type="text"
                       error={errorForm?.role}
-                      value={role}
+                      value={employeeDataForm.role}
                       onChange={hadnleEmployeeOnchange}
                     />
                     <p className="employee-error-text">{errorForm.role}</p>
@@ -618,7 +648,7 @@ export default function UserPage() {
                       type="number"
                       name="mobileNumber"
                       error={errorForm?.mobileNumber}
-                      value={mobileNumber}
+                      value={employeeDataForm.mobileNumber}
                       onChange={hadnleEmployeeOnchange}
                     />
                     <p className="employee-error-text">{errorForm.mobileNumber}</p>
@@ -629,7 +659,7 @@ export default function UserPage() {
                       name="email"
                       type="text"
                       error={errorForm?.email}
-                      value={email}
+                      value={employeeDataForm.email}
                       onChange={hadnleEmployeeOnchange}
                     />
                     <p className="employee-error-text">{errorForm.email}</p>
@@ -640,7 +670,7 @@ export default function UserPage() {
                       name="salary"
                       type="number"
                       error={errorForm?.salary}
-                      value={salary}
+                      value={employeeDataForm.salary}
                       onChange={hadnleEmployeeOnchange}
                     />
                     <p className="employee-error-text">{errorForm.salary}</p>
@@ -651,7 +681,7 @@ export default function UserPage() {
                       error={errorForm?.password}
                       name="password"
                       type="text"
-                      value={password}
+                      value={employeeDataForm.password}
                       onChange={hadnleEmployeeOnchange}
                     />
                     <p className="employee-error-text">{errorForm.password}</p>

@@ -17,13 +17,14 @@ export default function App() {
   const navigate=useNavigate()
    const [loginSuccess,setLoginSuccess]=useState()
 useEffect(() => {
-        var login=sessionStorage.getItem("login")
+        var login=sessionStorage.getItem("loginData")
         setLoginSuccess(login)
         if(!login){
            navigate('/login')
-           localStorage.removeItem("/login")
+           sessionStorage.removeItem("/login")
         }
     }, [])
+
     
 
   return (
@@ -31,11 +32,13 @@ useEffect(() => {
     <ThemeProvider>
       <ScrollToTop />
       <StyledChart />
-      {loginSuccess?<RouterComponent/>:
+      {
+        loginSuccess?
+   <RouterComponent/>:
       <Routes>
           <Route  path="/login" element={<LoginPage/>}/>
       </Routes>
-}
+      }
     </ThemeProvider>
     </UserDataProvider>
   );
