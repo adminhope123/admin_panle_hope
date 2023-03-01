@@ -155,7 +155,7 @@ export default function UserPage() {
     setEmployeeDataForm({ ...employeeDataForm, [e.target.name]: e.target.value });
   };
   const handleImgChange=(e)=>{
-    setImageUpload({image:[e.target.files[0]]})
+    setImageUpload({image:e.target.files[0]})
   }
   const allReadyDataAlertFunctionClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -192,7 +192,7 @@ export default function UserPage() {
     }
 
     // fetch('http://localhost:3004/employee', {
-    //   method: 'POST',
+    //   method: 'POST',  
     //   headers: {
     //     'Content-Type': 'application/json',
     //   },
@@ -265,7 +265,7 @@ export default function UserPage() {
   const hadnleEmployeeSubmit = (e) => {
     e.preventDefault();
     setIsSubmit(true);
-    setErrorForm(validate(employeeDataForm));
+    // setErrorForm(validate(employeeDataForm));
     //    console.log("imageDataData",imageDataData)
     // console.log('isSubmit', isSubmit);
     // console.log('employeeDataForm', employeeDataForm);
@@ -488,13 +488,13 @@ export default function UserPage() {
                                 <TableCell padding="checkbox">
                                   <Checkbox />
                                 </TableCell>
-
                                 <TableCell component="th" scope="row" padding="none">
                                   <Stack direction="row" alignItems="center" spacing={2}>
-                                    <Avatar alt={item?.userName} />
+                                    <Avatar alt={item?.userName} src={item.image}/>
                                   </Stack>
                                 </TableCell>
                                 <TableCell align="center">{item?.E_Id}</TableCell>
+                                <TableCell align="center"><img src={`http://127.0.0.1:8000/${item?.image}`}/></TableCell>
                                 <TableCell align="center">{item?.userName}</TableCell>
                                 <TableCell align="center">{item?.role}</TableCell>
                                 <TableCell align="center">{item?.email}</TableCell>
