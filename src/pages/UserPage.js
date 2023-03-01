@@ -283,16 +283,16 @@ export default function UserPage() {
           formData.append('salary',employeeDataForm.salary)
           formData.append('mobileNumber',employeeDataForm.mobileNumber)
           console.log("img",formData)
-             axios.post(`http://127.0.0.1:8000/api/employee`,formData)
-             .then(res=>{
-              if(res.data.status===200){
-                swal("api Called",res.data.message)
-              }else if(res.data.status===422){
-                  swal("api failed")
-              }
-             })
-          if(employeeDataForm){
-        dispatch(addEmployeeApi(employeeDataForm))
+            //  axios.post(`http://127.0.0.1:8000/api/employee`,formData)
+            //  .then(res=>{
+            //   if(res.data.status===200){
+            //     swal("api Called",res.data.message)
+            //   }else if(res.data.status===422){
+            //       swal("api failed")
+            //   }
+            //  })
+          if(formData){
+        dispatch(addEmployeeApi(formData))
         setNewUserModel(false);
       }
   //   console.log('yes');
@@ -490,11 +490,10 @@ export default function UserPage() {
                                 </TableCell>
                                 <TableCell component="th" scope="row" padding="none">
                                   <Stack direction="row" alignItems="center" spacing={2}>
-                                    <Avatar alt={item?.userName} src={item.image}/>
+                                    <Avatar alt={item?.userName} src={`http://127.0.0.1:8000/${item?.image}`}/>
                                   </Stack>
                                 </TableCell>
                                 <TableCell align="center">{item?.E_Id}</TableCell>
-                                <TableCell align="center"><img src={`http://127.0.0.1:8000/${item?.image}`}/></TableCell>
                                 <TableCell align="center">{item?.userName}</TableCell>
                                 <TableCell align="center">{item?.role}</TableCell>
                                 <TableCell align="center">{item?.email}</TableCell>

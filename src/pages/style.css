@@ -112,6 +112,7 @@
     font-size: 14px;
     font-weight: normal;
 }
+
 .employee-img-upload .employee-new-user form div{
     display: flex;
     flex-direction: column;

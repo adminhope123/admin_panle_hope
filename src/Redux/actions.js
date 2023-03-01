@@ -27,19 +27,17 @@ const updateEmployee = () => ({
   type: type.EMPLOYEE_UPDATE,
 });
 
-export const getEmployeeApi = () => {
-  const url = 'http://127.0.0.1:8000/api/viewemployee';
-  return function (dispatch) {
-    axios
-      .post(url)
-      .then((resp) => {
-        console.log('resp', resp);
-        dispatch(getEmployee(resp.data));
-        // dispatch(deleteEmployee())
+export const getEmployeeApi=()=>{
+  const url="http://127.0.0.1:8000/api/viewemployee";
+  return function (dispatch){
+          axios.get(url)
+          .then((resp)=>{
+          console.log("resp",resp)
+          dispatch(getEmployee(resp.data))
       })
-      .catch((error) => console.log('error', error));
+      .catch((error)=>console.log("error",error));
   };
-};
+}
 export const addEmployeeApi = (users) => {
   const url = 'http://127.0.0.1:8000/api/employee';
   return function (dispatch) {
