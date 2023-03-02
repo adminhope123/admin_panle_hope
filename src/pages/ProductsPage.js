@@ -241,11 +241,12 @@ const handleExpandClick = () => {
                     onClick={handleExpandClick}
                     aria-expanded={expanded}
                     aria-label="show more"
+                    key={index}
                   >
                     <ExpandMoreIcon />
                   </ExpandMore>
                 </CardActions>
-                <Collapse in={expanded} timeout="auto" unmountOnExit>
+                <Collapse in={expanded} timeout="auto" unmountOnExit   key={index}>
                   <CardContent>
                     <Typography paragraph>
                      Mobile No: {item.mobileNumber}
