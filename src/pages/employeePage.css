@@ -1,0 +1,21 @@
+.employee-page .MuiBox-root {
+    max-width: 100%;
+    margin-bottom: 23px;
+}
+.add-post-field{
+    display: flex;
+    justify-content: flex-end;
+}
+.employee-page-model form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+.employee-page-model .MuiFormControl-root {
+    margin-bottom: 13px;
+    width: 100%;
+}
+.employee-page-model form button{
+    background-color: #0e70d1;
+}

@@ -40,6 +40,17 @@ const usersReducers = (state = initialState, action) => {
           ...state,
           validation: action.payload,
         };
+        case type.ADD_POST_FIELD:
+      return {
+        ...state,
+        loading: false,
+      };
+      case type.GET_POST_FIELD:
+        return {
+          ...state,
+          users: action.payload,
+          loading: false,
+        };
     default:
       return state;
   }

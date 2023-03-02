@@ -594,31 +594,23 @@ export default function UserPage() {
             <Box sx={style}>
               <div className="employee-new-user">
                 <form onSubmit={hadnleEmployeeSubmit}>
-                  {/* <div className='employee-img-upload'>
+                  <div className='employee-img-upload'>
                   <Stack direction="row" alignItems="center" spacing={2}>
                   
                       {
                         !preview?.length ?  
                         <Button variant="contained" component="label"  className='upload-img'><img src={uploadImgIcon}/>   
-                          <input hidden   type="file" accept="image/png , image/jepg,.txt,.doc" id='image' name='image'  onChange={inputimage} />
+                          <input hidden   type="file" accept="image/png , image/jepg,.txt,.doc" id='image' name='image'  onChange={handleImgChange} />
                         </Button> 
                         : 
                         <Button variant="contained" component="label" className='preview-img'>   <img src={preview} />
-                        <input hidden   type="file" accept="image/png , image/jepg,.txt,.doc" id='image' name='image'  onChange={inputimage} />
+                        <input hidden   type="file" accept="image/png , image/jepg,.txt,.doc" id='image' name='image'  onChange={handleImgChange} />
                       </Button> 
                      
                       }
                    
                   </Stack>
-                  </div> */}
-                   <FormControl>
-                    <TextField
-                      label="User Name"
-                      type="file"
-                      name="image"
-                      onChange={handleImgChange}
-                    />
-                    </FormControl>
+                  </div>
                   <FormControl>
                     <TextField
                       label="User Name"

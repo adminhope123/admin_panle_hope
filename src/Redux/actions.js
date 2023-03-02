@@ -16,9 +16,16 @@ const getAddminPanle = (users) => ({
 const addEmployee = () => ({
   type: type.EMPLOYEE_ADD,
 });
-
 const deleteEmployee = () => ({
   type: type.EMPLOYEE_DELETE,
+});
+
+const addFiledPost = () => ({
+  type: type.ADD_POST_FIELD,
+});
+const getFiled = (users) => ({
+  type: type.GET_POST_FIELD,
+  payload: users,
 });
 
 
@@ -75,4 +82,28 @@ export const updateEmployeeApi=(user,employeeEditIdData)=>{
       })
       .catch((error)=>console.log("error",error))
   }
+}
+export const addFiledPostApi = (users) => {
+  const url = 'http://localhost:3004/addpost';
+  return function (dispatch) {
+    axios
+      .post(url, users)
+      .then((resp) => {
+        console.log('resp', resp.data);
+        dispatch(addFiledPost());
+        dispatch(getEmployeeApi());
+      })
+      .catch((error) => console.log('error', error));
+  };
+};
+export const getFiledPostApi=()=>{
+  const url="http://localhost:3004/addpost";
+  return function (dispatch){
+          axios.get(url)
+          .then((resp)=>{
+          console.log("resp",resp)
+          dispatch(getFiled(resp.data))
+      })
+      .catch((error)=>console.log("error",error));
+  };
 }

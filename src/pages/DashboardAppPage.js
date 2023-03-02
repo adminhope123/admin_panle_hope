@@ -17,12 +17,30 @@ import {
   AppCurrentSubject,
   AppConversionRates,
 } from '../sections/@dashboard/app';
+import { useDispatch, useSelector } from 'react-redux';
+import { getEmployeeApi } from 'src/Redux/actions';
+import { useEffect } from 'react';
 
 // ----------------------------------------------------------------------
 
 export default function DashboardAppPage() {
   const theme = useTheme();
+  const dispatch=useDispatch()
+  const {users}=useSelector(res=>res.data)
+  
+    const getUserData=()=>{
+      console.log("user",users)
+      if(users){
+        const data=users
+        console.log("users",users)
+         sessionStorage.setItem("AllEmployee",JSON.stringify(data))
+      }
+    }
 
+  useEffect(() => {
+    getUserData()
+    dispatch(getEmployeeApi())
+  }, [])
   return (
     <>
       <Helmet>
