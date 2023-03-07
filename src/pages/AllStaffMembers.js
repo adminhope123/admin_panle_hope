@@ -47,7 +47,7 @@ const ExpandMore = styled((props) => {
 }));
 
 
-export default function ProductsPage() {
+export default function AllStaffMembers() {
   const [openFilter, setOpenFilter] = useState(false);
   const  dispatch=useDispatch() 
    const {users}=useSelector(res=>res.data)
@@ -57,7 +57,8 @@ export default function ProductsPage() {
   })
 const [showDataEmployee,setShowDataEmployee]=useState()
 const [expanded, setExpanded] = useState(false);
-
+const [filterDataData,setFilterData]=useState()
+const [intialShowData,setIntialShowData]=useState()
 const handleExpandClick = () => {
   setExpanded(!expanded);
 };
@@ -80,10 +81,21 @@ const handleExpandClick = () => {
     console.log("getData",getData)
     if(getData){
       const filterData=getData?.filter(ele=>ele?.role===item)
-      console.log("filterData",filterData)
+      setFilterData(filterData)
       setShowDataEmployee(filterData)
     }
   }
+  const showData=()=>{
+    const getData=JSON.parse(sessionStorage.getItem("AllEmployee"))
+    console.log("getData",getData)
+    const filterData=getData?.filter(ele=>ele?.role==="CEO")
+    console.log("filterData",filterData)
+    setIntialShowData(filterData)
+  }
+useEffect(() => {
+  handleChangePost()
+  showData()
+}, [])
 
   const handleImgChange=(e)=>{
     setIconImg({image:e.target.files[0]})
@@ -189,19 +201,105 @@ const handleExpandClick = () => {
               })
             }
           </Box>
-           <Box sx={{display:"grid",gridTemplateColumns:"repeat(3, minmax(0, 1fr))",gap:"30px",marginTop:"30px"}}>
-           {
+           <Box >
+            <div>
+            </div>
+             {
+              showDataEmployee?.length===0 ?<div>
+             <Box sx={{display:"grid",gridTemplateColumns:"repeat(3, minmax(0, 1fr))",gap:"30px",marginTop:"30px"}}>
+             {
+               intialShowData?.map((item,index)=>{
+                 const data=item?.userName
+                 const dataGet=data?.charAt(0).toUpperCase() + data?.slice(0,0);
+                 return(
+                   <Box>
+                      <Card sx={{ maxWidth: 345 }}>
+                   <CardHeader
+                   sx={{textTransform:"capitalize"}}
+                     avatar={
+                       <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+                         {dataGet}
+                       </Avatar>
+                     }
+                     action={
+                       <IconButton aria-label="settings">
+                         <MoreVertIcon />
+                       </IconButton>
+                     }
+                     title={item?.userName}
+                     subheader="September 14, 2016"
+                   />
+                   <CardMedia
+                     component="img"
+                     height="194"
+                     image={`http://127.0.0.1:8000/${item?.image}`}
+                     alt="Paella dish"
+                   />
+                   <CardContent>
+                  <Typography variant="body2" color="text.secondary" sx={{fontWeight:"bold",textTransform:"capitalize",fontSize:"16px"}}>
+                    {item?.E_Id}
+                     </Typography>
+                     <Typography variant="body2" color="text.secondary" sx={{fontWeight:"normal",textTransform:"capitalize",fontSize:"16px"}}>
+                    {item?.userName}
+                     </Typography>
+                     <Typography variant="body2" color="text.secondary" sx={{fontWeight:"normal",fontSize:"16px"}}>
+                    {item?.email}
+                     </Typography>
+                   </CardContent>
+                   <CardActions disableSpacing>
+                     <IconButton aria-label="add to favorites">
+                       <FavoriteIcon />
+                     </IconButton>
+                     <IconButton aria-label="share">
+                       <ShareIcon />
+                     </IconButton>
+                     <ExpandMore
+                       expand={expanded}
+                       onClick={handleExpandClick}
+                       aria-expanded={expanded}
+                       aria-label="show more"
+                       key={index}
+                     >
+                       <ExpandMoreIcon />
+                     </ExpandMore>
+                   </CardActions>
+                   <Collapse in={expanded} timeout="auto" unmountOnExit   key={index}>
+                     <CardContent>
+                       <Typography paragraph>
+                        Mobile No: {item.mobileNumber}
+                       </Typography>
+                       <Typography paragraph>
+                       Salary:  {item.salary}
+                       </Typography>
+                       <Typography paragraph>
+                       Post:  {item.role}
+                       </Typography>
+                     </CardContent>
+                   </Collapse>
+                 </Card> 
+                    </Box>
+                 
+               
+                 
+                 )
+               })
+             }
+             </Box>
+              </div>
+              :
+        <Box sx={{display:"grid",gridTemplateColumns:"repeat(3, minmax(0, 1fr))",gap:"30px",marginTop:"30px"}}>
+        {
             showDataEmployee?.map((item,index)=>{
               const data=item?.userName
-              const dataGet=data.charAt(0).toUpperCase() + data.slice(0,1);
-              const dataFirst=dataGet.slice(0,1)
+              const dataGet=data?.charAt(0).toUpperCase() + data?.slice(0,0);
               return(
-                <Card sx={{ maxWidth: 345 }}>
+                <div>
+   <Card sx={{ maxWidth: 345 }}>
                 <CardHeader
                 sx={{textTransform:"capitalize"}}
                   avatar={
                     <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                      {dataFirst}
+                      {dataGet}
                     </Avatar>
                   }
                   action={
@@ -259,10 +357,16 @@ const handleExpandClick = () => {
                     </Typography>
                   </CardContent>
                 </Collapse>
-              </Card>
+              </Card> 
+                </div>
+              
+            
+              
               )
             })
           }
+        </Box>
+             }
            </Box>
         {/* <ProductList products={showDataEmployee} /> */}
         <ProductCartWidget />

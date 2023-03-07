@@ -7,10 +7,10 @@ import BlogPage from './pages/BlogPage';
 import UserPage from './pages/UserPage';
 import LoginPage from './pages/LoginPage';
 import Page404 from './pages/Page404';
-import ProductsPage from './pages/ProductsPage';
 import DashboardAppPage from './pages/DashboardAppPage';
 import EventPage from './pages/Event/EventPage';
 import EmployeeAttendance from './pages/EmployeeTimer/EmployeeAttendance';
+import AllStaffMembers from './pages/AllStaffMembers';
 
 // ----------------------------------------------------------------------
 
@@ -24,7 +24,7 @@ export default function Router() {
         { path: 'app', element: <DashboardAppPage /> },
         { path: 'employee', element: <UserPage /> },
         { path: 'employeeAttendance', element: < EmployeeAttendance/> },
-        { path: 'products', element: <ProductsPage /> },
+        { path: 'allstaffmembers', element: <AllStaffMembers /> },
         { path: 'event', element: <EventPage /> },
         { path: 'blog', element: <BlogPage /> },
       ],

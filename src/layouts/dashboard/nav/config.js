@@ -1,7 +1,7 @@
 // component
 import SvgColor from '../../../components/svg-color';
 import EventIcon from '@mui/icons-material/Event';
-
+import GroupsIcon from '@mui/icons-material/Groups';
 // ----------------------------------------------------------------------
 
 const icon = (name) => <SvgColor src={`/assets/icons/navbar/${name}.svg`} sx={{ width: 1, height: 1 }} />;
@@ -28,9 +28,9 @@ const navConfig = [
     icon: <EventIcon/>,
   },
   {
-    title: 'product',
-    path: '/dashboard/products',
-    icon: icon('ic_cart'),
+    title: 'All Staff Members',
+    path: '/dashboard/allstaffmembers',
+    icon: <GroupsIcon/>,
   },
   
   {

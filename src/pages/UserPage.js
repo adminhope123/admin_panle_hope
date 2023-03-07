@@ -32,6 +32,8 @@ import {
   StackProps,
   MuiAlert,
   Alert,
+  Select,
+  Autocomplete,
 } from '@mui/material';
 
 // components
@@ -104,6 +106,9 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
+const postDataData=["CEO", ,"HR","React Js","Angular","UI/UX Design","Student" ,"Python","Designer"]
+
+
 export default function UserPage() {
   const dispatch = useDispatch();
   const [imageDataData, setImageDataData] = useState();
@@ -129,11 +134,13 @@ export default function UserPage() {
   const [employeeImgUpload,setEmployeeImgUpload]=useState()
   const [preview, setPreview] = useState()
   const [employeeEditId, setEmployeeEditId] = useState();
+  const [value, setValue] =useState();
+  const [inputValue, setInputValue] =useState('');
+  const [postData,setPostData]=useState()
   const [employeeDataForm, setEmployeeDataForm] = useState({
     userName: '',
     email: '',
     mobileNumber: '',
-    role: '',
     password: '',
     salary: '',
   });
@@ -148,6 +155,13 @@ export default function UserPage() {
   });
   const { userName, email, mobileNumber, role, password, address, salary,userImg } = employeeDataForm;
   const { users } = useSelector((state) => state.data);
+  
+  const handleChange = (event) => {
+    // setPostData(event.target.value);
+    const value = event.target.value;
+    setPostData(value);
+  };
+
   const hadnleEmployeeOnchange = (e) => {
     e.persist()
     const name = e.target.name;
@@ -274,14 +288,14 @@ export default function UserPage() {
     // });
 
       // if (data.length ===0) {
-         var formData=new FormData()
+          var formData=new FormData()
           formData.append('image',imageUpload.image)
           formData.append('userName',employeeDataForm.userName)
-          formData.append('role',employeeDataForm.role)
           formData.append('password',employeeDataForm.password)
           formData.append('email',employeeDataForm.email)
           formData.append('salary',employeeDataForm.salary)
           formData.append('mobileNumber',employeeDataForm.mobileNumber)
+          formData.append('role',inputValue)
           console.log("img",formData)
             //  axios.post(`http://127.0.0.1:8000/api/employee`,formData)
             //  .then(res=>{
@@ -347,6 +361,7 @@ export default function UserPage() {
 
   useEffect(() => {
     dispatch(getEmployeeApi());
+    sessionStorage.setItem("employee",JSON.stringify(users))
   }, []);
 
   const handleNewUserModelClose = () => {
@@ -622,7 +637,21 @@ export default function UserPage() {
                     />
                     <p className="employee-error-text">{errorForm.userName}</p>
                   </FormControl>
-                  <FormControl>
+      <Autocomplete
+      sx={{ m: 1,width:"100%" }} size="small"
+        value={value}
+        onChange={(event, newValue) => {
+          setValue(newValue);
+        }}
+        inputValue={inputValue}
+        onInputChange={(event, newInputValue) => {
+          setInputValue(newInputValue);
+        }}
+        id="controllable-states-demo"
+        options={postDataData}
+        renderInput={(params) => <TextField {...params} label="Post" />}
+      />
+                  {/* <FormControl>
                     <TextField
                       label="Role"
                       name="role"
@@ -632,7 +661,7 @@ export default function UserPage() {
                       onChange={hadnleEmployeeOnchange}
                     />
                     <p className="employee-error-text">{errorForm.role}</p>
-                  </FormControl>
+                  </FormControl> */}
                   <FormControl>
                     <TextField
                       label="Mobile Number"
@@ -709,7 +738,7 @@ export default function UserPage() {
                     />
                     <p className="employee-error-text">{errorForm.userName}</p>
                   </FormControl>
-                  <FormControl>
+                  {/* <FormControl>
                     <TextField
                       label="Role"
                       name="role"
@@ -719,7 +748,7 @@ export default function UserPage() {
                       onChange={hadnleEditEmployeeOnchange}
                     />
                     <p className="employee-error-text">{errorForm.role}</p>
-                  </FormControl>
+                  </FormControl> */}
                   <FormControl>
                     <TextField
                       label="Mobile Number"
