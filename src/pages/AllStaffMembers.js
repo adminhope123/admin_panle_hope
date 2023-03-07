@@ -8,7 +8,7 @@ import { ProductSort, ProductList, ProductCartWidget, ProductFilterSidebar } fro
 // mock
 import PRODUCTS from '../_mock/products';
 import { useDispatch, useSelector } from 'react-redux';
-import { addFiledPostApi, getEmployeeApi, getFiledPostApi } from 'src/Redux/actions';
+import { addFiledPostApi, deletePostApi, getEmployeeApi, getFiledPostApi } from 'src/Redux/actions';
 import AddIcon from '@mui/icons-material/Add';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
@@ -20,6 +20,7 @@ import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import DeleteIcon from '@mui/icons-material/Delete';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import styled from '@emotion/styled';
 
@@ -51,6 +52,7 @@ export default function AllStaffMembers() {
   const [openFilter, setOpenFilter] = useState(false);
   const  dispatch=useDispatch() 
    const {users}=useSelector(res=>res.data)
+   const [imageUpload,setImageUpload]=useState([])
   const [open, setOpen] = useState(false);
   const [addFieldData,setAddFieldData]=useState({
     post:""
@@ -66,7 +68,13 @@ const handleExpandClick = () => {
    
   const hadnleSubmit=(e)=>{
     e.preventDefault();
-    dispatch(addFiledPostApi(addFieldData))
+    var formData=new FormData()
+    formData.append("post",addFieldData)
+    formData.append("image",imageUpload.image)
+    dispatch(addFiledPostApi(formData))
+    if( dispatch(addFiledPostApi(formData))){
+      setOpen(false)
+    }
     // console.log("addFiledData",addFieldData)
     // var formData=new FormData()
     // formData.append('image',iconImg.image)
@@ -74,6 +82,9 @@ const handleExpandClick = () => {
     // if(formData){
     //   dispatch(addFiledPostApi(formData))
     // }
+  }
+  const handleImgChange=(e)=>{
+    setImageUpload({image:e.target.files[0]})
   }
   const handleChangePost=(item)=>{
   console.log("item",item)
@@ -97,9 +108,13 @@ useEffect(() => {
   showData()
 }, [])
 
-  const handleImgChange=(e)=>{
-    setIconImg({image:e.target.files[0]})
-  }
+const deletePostData=(item)=>{
+  if(item){
+    const employeeEditIdData=item?.id
+    dispatch(deletePostApi(employeeEditIdData))
+  } 
+}
+
   const handleAddFieldOnChange=(e)=>{
     const { name, value } = e.target;
     setAddFieldData({ ...addFieldData, [name]: value });
@@ -196,6 +211,9 @@ useEffect(() => {
                 return(
                   <div key={item.id}>
                     <Button onClick={()=>handleChangePost(item.post)}>{item.post}</Button>
+                    <IconButton aria-label="settings" sx={{paddingLeft:"0px"}} onClick={()=>deletePostData(item)}>
+                      <DeleteIcon sx={{fontSize:"19px"}}/>
+                    </IconButton>
                   </div>
                 )
               })

@@ -51,6 +51,11 @@ const usersReducers = (state = initialState, action) => {
           users: action.payload,
           loading: false,
         };
+        case type.DELETE_POST_API:
+      return {
+        ...state,
+        loading: false,
+      };
     default:
       return state;
   }

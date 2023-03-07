@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { get } from 'lodash';
 
 import * as type from './actionType';
 
@@ -19,7 +20,9 @@ const addEmployee = () => ({
 const deleteEmployee = () => ({
   type: type.EMPLOYEE_DELETE,
 });
-
+const deletePostData = () => ({
+  type: type.DELETE_POST_API,
+});
 const addFiledPost = () => ({
   type: type.ADD_POST_FIELD,
 });
@@ -107,3 +110,16 @@ export const getFiledPostApi=()=>{
       .catch((error)=>console.log("error",error));
   };
 }
+export const deletePostApi = (employeeEditIdData) => {
+  const dataaa = `http://localhost:3000/addpost/${employeeEditIdData}`;
+  return function (dispatch) {
+    axios
+      .delete(dataaa)
+      .then((resp) => {
+        console.log('resp', resp);
+        dispatch(deletePostData());
+        dispatch(getFiledPostApi());
+      })
+      .catch((error) => console.log('error', error));
+  };
+};
