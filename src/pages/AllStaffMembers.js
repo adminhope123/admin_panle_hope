@@ -166,13 +166,13 @@ useEffect(() => {
       </Modal>
 
      <Helmet>
-        <title> Dashboard: Products |  User Web </title>
+        <title> Dashboard: All Staff |  User Web </title>
       </Helmet>
 
 
       <Container>
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Products
+          All Staff
         </Typography>
          <div className='add-post-field'>
          <Button  variant="contained" onClick={handleOpen}>
@@ -202,91 +202,6 @@ useEffect(() => {
             }
           </Box>
            <Box >
-            <div>
-            </div>
-             {
-              showDataEmployee?.length===0 ?<div>
-             <Box sx={{display:"grid",gridTemplateColumns:"repeat(3, minmax(0, 1fr))",gap:"30px",marginTop:"30px"}}>
-             {
-               intialShowData?.map((item,index)=>{
-                 const data=item?.userName
-                 const dataGet=data?.charAt(0).toUpperCase() + data?.slice(0,0);
-                 return(
-                   <Box>
-                      <Card sx={{ maxWidth: 345 }}>
-                   <CardHeader
-                   sx={{textTransform:"capitalize"}}
-                     avatar={
-                       <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                         {dataGet}
-                       </Avatar>
-                     }
-                     action={
-                       <IconButton aria-label="settings">
-                         <MoreVertIcon />
-                       </IconButton>
-                     }
-                     title={item?.userName}
-                     subheader="September 14, 2016"
-                   />
-                   <CardMedia
-                     component="img"
-                     height="194"
-                     image={`http://127.0.0.1:8000/${item?.image}`}
-                     alt="Paella dish"
-                   />
-                   <CardContent>
-                  <Typography variant="body2" color="text.secondary" sx={{fontWeight:"bold",textTransform:"capitalize",fontSize:"16px"}}>
-                    {item?.E_Id}
-                     </Typography>
-                     <Typography variant="body2" color="text.secondary" sx={{fontWeight:"normal",textTransform:"capitalize",fontSize:"16px"}}>
-                    {item?.userName}
-                     </Typography>
-                     <Typography variant="body2" color="text.secondary" sx={{fontWeight:"normal",fontSize:"16px"}}>
-                    {item?.email}
-                     </Typography>
-                   </CardContent>
-                   <CardActions disableSpacing>
-                     <IconButton aria-label="add to favorites">
-                       <FavoriteIcon />
-                     </IconButton>
-                     <IconButton aria-label="share">
-                       <ShareIcon />
-                     </IconButton>
-                     <ExpandMore
-                       expand={expanded}
-                       onClick={handleExpandClick}
-                       aria-expanded={expanded}
-                       aria-label="show more"
-                       key={index}
-                     >
-                       <ExpandMoreIcon />
-                     </ExpandMore>
-                   </CardActions>
-                   <Collapse in={expanded} timeout="auto" unmountOnExit   key={index}>
-                     <CardContent>
-                       <Typography paragraph>
-                        Mobile No: {item.mobileNumber}
-                       </Typography>
-                       <Typography paragraph>
-                       Salary:  {item.salary}
-                       </Typography>
-                       <Typography paragraph>
-                       Post:  {item.role}
-                       </Typography>
-                     </CardContent>
-                   </Collapse>
-                 </Card> 
-                    </Box>
-                 
-               
-                 
-                 )
-               })
-             }
-             </Box>
-              </div>
-              :
         <Box sx={{display:"grid",gridTemplateColumns:"repeat(3, minmax(0, 1fr))",gap:"30px",marginTop:"30px"}}>
         {
             showDataEmployee?.map((item,index)=>{
@@ -314,7 +229,7 @@ useEffect(() => {
                   component="img"
                   height="194"
                   image={`http://127.0.0.1:8000/${item?.image}`}
-                  alt="Paella dish"
+                  alt={item?.userName}
                 />
                 <CardContent>
                <Typography variant="body2" color="text.secondary" sx={{fontWeight:"bold",textTransform:"capitalize",fontSize:"16px"}}>
@@ -366,7 +281,6 @@ useEffect(() => {
             })
           }
         </Box>
-             }
            </Box>
         {/* <ProductList products={showDataEmployee} /> */}
         <ProductCartWidget />

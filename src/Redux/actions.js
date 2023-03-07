@@ -84,7 +84,7 @@ export const updateEmployeeApi=(user,employeeEditIdData)=>{
   }
 }
 export const addFiledPostApi = (users) => {
-  const url = 'http://localhost:3004/addpost';
+  const url = 'http://localhost:3000/addpost';
   return function (dispatch) {
     axios
       .post(url, users)
@@ -97,7 +97,7 @@ export const addFiledPostApi = (users) => {
   };
 };
 export const getFiledPostApi=()=>{
-  const url="http://localhost:3004/addpost";
+  const url="http://localhost:3000/addpost";
   return function (dispatch){
           axios.get(url)
           .then((resp)=>{
