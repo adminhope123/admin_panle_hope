@@ -65,13 +65,15 @@ const handleExpandClick = () => {
   setExpanded(!expanded);
 };
   const [iconImg,setIconImg]=useState()
-   
   const hadnleSubmit=(e)=>{
+    
     e.preventDefault();
     var formData=new FormData()
-    formData.append("post",addFieldData)
+    formData.append("role",addFieldData?.post)
     formData.append("image",imageUpload.image)
+
     dispatch(addFiledPostApi(formData))
+    
     if( dispatch(addFiledPostApi(formData))){
       setOpen(false)
     }
@@ -210,7 +212,7 @@ const deletePostData=(item)=>{
               users?.map((item)=>{
                 return(
                   <div key={item.id}>
-                    <Button onClick={()=>handleChangePost(item.post)}>{item.post}</Button>
+                    <Button onClick={()=>handleChangePost(item.role)}>{item.role}</Button>
                     <IconButton aria-label="settings" sx={{paddingLeft:"0px"}} onClick={()=>deletePostData(item)}>
                       <DeleteIcon sx={{fontSize:"19px"}}/>
                     </IconButton>

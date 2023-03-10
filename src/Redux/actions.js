@@ -87,7 +87,7 @@ export const updateEmployeeApi=(user,employeeEditIdData)=>{
   }
 }
 export const addFiledPostApi = (users) => {
-  const url = 'http://localhost:3000/addpost';
+  const url = 'http://127.0.0.1:8000/api/Uaddpost';
   return function (dispatch) {
     axios
       .post(url, users)
@@ -100,7 +100,7 @@ export const addFiledPostApi = (users) => {
   };
 };
 export const getFiledPostApi=()=>{
-  const url="http://localhost:3000/addpost";
+  const url="http://127.0.0.1:8000/api/viewUaddpost";
   return function (dispatch){
           axios.get(url)
           .then((resp)=>{
@@ -111,7 +111,7 @@ export const getFiledPostApi=()=>{
   };
 }
 export const deletePostApi = (employeeEditIdData) => {
-  const dataaa = `http://localhost:3000/addpost/${employeeEditIdData}`;
+  const dataaa = `http://127.0.0.1:8000/api/Uaddpostdelete/${employeeEditIdData}`;
   return function (dispatch) {
     axios
       .delete(dataaa)
