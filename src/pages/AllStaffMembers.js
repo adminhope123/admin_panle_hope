@@ -65,13 +65,14 @@ const handleExpandClick = () => {
   setExpanded(!expanded);
 };
   const [iconImg,setIconImg]=useState()
-   
   const hadnleSubmit=(e)=>{
+    
     e.preventDefault();
     var formData=new FormData()
-    formData.append("image",imageUpload.image)
     formData.append("role",addFieldData?.post)
+    formData.append("image",imageUpload.image)
     dispatch(addFiledPostApi(formData))
+    
     if( dispatch(addFiledPostApi(formData))){
       setOpen(false)
     }
