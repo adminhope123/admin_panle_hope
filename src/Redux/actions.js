@@ -38,7 +38,7 @@ const updateEmployee = () => ({
 });
 
 export const getEmployeeApi=()=>{
-  const url="http://127.0.0.1:8000/api/viewemployee";
+  const url="https://admin.hopeinfosys.com/api/viewemployee";
   return function (dispatch){
           axios.get(url)
           .then((resp)=>{
@@ -49,7 +49,7 @@ export const getEmployeeApi=()=>{
   };
 }
 export const addEmployeeApi = (users) => {
-  const url = 'http://127.0.0.1:8000/api/employee';
+  const url = 'https://admin.hopeinfosys.com/api/employee';
   return function (dispatch) {
     axios
       .post(url, users)
@@ -62,7 +62,7 @@ export const addEmployeeApi = (users) => {
   };
 };
 export const deleteEmployeeApi = (employeeEditIdData) => {
-  const dataaa = `http://127.0.0.1:8000/api/deleteemployee/${employeeEditIdData}`;
+  const dataaa = `https://admin.hopeinfosys.com/api/deleteemployee/${employeeEditIdData}`;
   return function (dispatch) {
     axios
       .delete(dataaa)
@@ -75,7 +75,7 @@ export const deleteEmployeeApi = (employeeEditIdData) => {
   };
 };
 export const updateEmployeeApi=(user,employeeEditIdData)=>{
-  const url=`http://127.0.0.1:8000/api/updatesaveemployee/${employeeEditIdData}`;
+  const url=`https://admin.hopeinfosys.com/api/updatesaveemployee/${employeeEditIdData}`;
   return function (dispatch){
           axios.put(url,user)
           .then((resp)=>{
@@ -87,7 +87,7 @@ export const updateEmployeeApi=(user,employeeEditIdData)=>{
   }
 }
 export const addFiledPostApi = (users) => {
-  const url = 'http://127.0.0.1:8000/api/Uaddpost';
+  const url = 'https://admin.hopeinfosys.com/api/Uaddpost';
   return function (dispatch) {
     axios
       .post(url, users)
@@ -100,7 +100,7 @@ export const addFiledPostApi = (users) => {
   };
 };
 export const getFiledPostApi=()=>{
-  const url="http://127.0.0.1:8000/api/viewUaddpost";
+  const url="https://admin.hopeinfosys.com/api/viewUaddpost";
   return function (dispatch){
           axios.get(url)
           .then((resp)=>{
@@ -111,7 +111,7 @@ export const getFiledPostApi=()=>{
   };
 }
 export const deletePostApi = (employeeEditIdData) => {
-  const dataaa = `http://127.0.0.1:8000/api/Uaddpostdelete/${employeeEditIdData}`;
+  const dataaa = `https://admin.hopeinfosys.com/api/Uaddpostdelete/${employeeEditIdData}`;
   return function (dispatch) {
     axios
       .delete(dataaa)
