@@ -505,7 +505,7 @@ export default function UserPage() {
                                 </TableCell>
                                 <TableCell component="th" scope="row" padding="none">
                                   <Stack direction="row" alignItems="center" spacing={2}>
-                                    <Avatar alt={item?.userName} src={`http://127.0.0.1:8000/${item?.image}`}/>
+                                    <Avatar alt={item?.userName} src={`https://hopeusers.hopeinfosys.com/${item?.image}`}/>
                                   </Stack>
                                 </TableCell>
                                 <TableCell align="center">{item?.E_Id}</TableCell>

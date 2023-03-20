@@ -248,7 +248,7 @@ const deletePostData=(item)=>{
                 <CardMedia
                   component="img"
                   height="194"
-                  image={`http://127.0.0.1:8000/${item?.image}`}
+                  image={`https://hopeusers.hopeinfosys.com/${item?.image}`}
                   alt={item?.userName}
                 />
                 <CardContent>

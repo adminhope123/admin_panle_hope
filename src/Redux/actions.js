@@ -8,6 +8,13 @@ const getEmployee = (users) => ({
   payload: users,
 });
 
+
+const attendanceGet=(users)=>({
+  type:type.ATTENDANCE_GET_API,
+  payload:users
+})
+
+
 const getAddminPanle = (users) => ({
     type: type.ADMIN_PANLE_DATA,
     payload: users,
@@ -38,7 +45,7 @@ const updateEmployee = () => ({
 });
 
 export const getEmployeeApi=()=>{
-  const url="http://127.0.0.1:8000/api/viewemployee";
+  const url="https://hopeusers.hopeinfosys.com/api/viewemployee";
   return function (dispatch){
           axios.get(url)
           .then((resp)=>{
@@ -49,7 +56,7 @@ export const getEmployeeApi=()=>{
   };
 }
 export const addEmployeeApi = (users) => {
-  const url = 'http://127.0.0.1:8000/api/employee';
+  const url = 'https://hopeusers.hopeinfosys.com/api/employee';
   return function (dispatch) {
     axios
       .post(url, users)
@@ -62,7 +69,7 @@ export const addEmployeeApi = (users) => {
   };
 };
 export const deleteEmployeeApi = (employeeEditIdData) => {
-  const dataaa = `http://127.0.0.1:8000/api/deleteemployee/${employeeEditIdData}`;
+  const dataaa = `https://hopeusers.hopeinfosys.com/api/deleteemployee/${employeeEditIdData}`;
   return function (dispatch) {
     axios
       .delete(dataaa)
@@ -75,7 +82,7 @@ export const deleteEmployeeApi = (employeeEditIdData) => {
   };
 };
 export const updateEmployeeApi=(user,employeeEditIdData)=>{
-  const url=`http://127.0.0.1:8000/api/updatesaveemployee/${employeeEditIdData}`;
+  const url=`https://hopeusers.hopeinfosys.com/api/updatesaveemployee/${employeeEditIdData}`;
   return function (dispatch){
           axios.put(url,user)
           .then((resp)=>{
@@ -87,7 +94,7 @@ export const updateEmployeeApi=(user,employeeEditIdData)=>{
   }
 }
 export const addFiledPostApi = (users) => {
-  const url = 'http://127.0.0.1:8000/api/Uaddpost';
+  const url = 'https://hopeusers.hopeinfosys.com/api/Uaddpost';
   return function (dispatch) {
     axios
       .post(url, users)
@@ -100,7 +107,7 @@ export const addFiledPostApi = (users) => {
   };
 };
 export const getFiledPostApi=()=>{
-  const url="http://127.0.0.1:8000/api/viewUaddpost";
+  const url="https://hopeusers.hopeinfosys.com/api/viewUaddpost";
   return function (dispatch){
           axios.get(url)
           .then((resp)=>{
@@ -111,7 +118,7 @@ export const getFiledPostApi=()=>{
   };
 }
 export const deletePostApi = (employeeEditIdData) => {
-  const dataaa = `http://127.0.0.1:8000/api/Uaddpostdelete/${employeeEditIdData}`;
+  const dataaa = `https://hopeusers.hopeinfosys.com/api/Uaddpostdelete/${employeeEditIdData}`;
   return function (dispatch) {
     axios
       .delete(dataaa)
@@ -123,3 +130,14 @@ export const deletePostApi = (employeeEditIdData) => {
       .catch((error) => console.log('error', error));
   };
 };
+export const attendanceGetApi=()=>{
+  const url="https://hopeusers.hopeinfosys.com/api/viewUattendence";
+  return function (dispatch){
+          axios.get(url)
+          .then((resp)=>{
+          console.log("resp",resp)
+          dispatch(attendanceGet(resp.data))
+      })
+      .catch((error)=>console.log("error",error));
+  };
+}

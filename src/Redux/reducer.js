@@ -56,6 +56,12 @@ const usersReducers = (state = initialState, action) => {
         ...state,
         loading: false,
       };
+      case type.ATTENDANCE_GET_API:
+      return {
+        ...state,
+        users: action.payload,
+        loading: false,
+      };
     default:
       return state;
   }

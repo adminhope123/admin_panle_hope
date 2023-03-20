@@ -1,7 +1,6 @@
 {
-  "name": "@minimal/material-kit-react",
+  "name": "hopeinfosys",
   "author": "minimals.cc",
-  "licence": "MIT",
   "version": "1.6.0",
   "private": false,
   "scripts": {
