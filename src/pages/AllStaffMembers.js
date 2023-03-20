@@ -68,10 +68,9 @@ const handleExpandClick = () => {
   const hadnleSubmit=(e)=>{
     
     e.preventDefault();
-    var formData=new FormData()
+    var formData=new FormData()   
     formData.append("role",addFieldData?.post)
     formData.append("image",imageUpload.image)
-
     dispatch(addFiledPostApi(formData))
     
     if( dispatch(addFiledPostApi(formData))){
