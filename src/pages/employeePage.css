@@ -1,7 +1,6 @@
 .employee-page .MuiBox-root {
     max-width: 100%;
-    margin-bottom: 23px;
-}
+    }
 .add-post-field{
     display: flex;
     justify-content: flex-end;

@@ -67,10 +67,10 @@ const TABLE_HEAD = [
   { id: 'img', label: 'Img', alignRight: false },
   { id: 'E_Id', label: 'Employee Id', alignRight: false },
   { id: 'userName', label: 'User Name', alignRight: false },
-  { id: 'role', label: 'Role', alignRight: false },
+  { id: 'post', label: 'Post', alignRight: false },
   { id: 'email', label: 'Email', alignRight: false },
   { id: 'mobileNumber', label: 'Mobile Number', alignRight: false },
-  { id: 'salary', label: 'salary', alignRight: false },
+  // { id: 'salary', label: 'salary', alignRight: false },
   { id: '', label: '', alignRight: false },
   { id: '', label: '', alignRight: false },
 ];
@@ -106,7 +106,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-const postDataData=["CEO", ,"HR","React Js","Angular","UI/UX Design","Student" ,"Python","Designer"]
+const postDataData=["CEO","HR","Node Js","Web Design","Web Devloper","Wordpress Devloper","Wordpress Designer","Laravel Devloper(PHP)","Android Devloper","React Js","Angular","UI/UX Design","Student" ,"Python","BDE","Designer"]
 
 
 export default function UserPage() {
@@ -136,7 +136,11 @@ export default function UserPage() {
   const [employeeEditId, setEmployeeEditId] = useState();
   const [value, setValue] =useState();
   const [inputValue, setInputValue] =useState('');
+  const [editValue, setEditValue] =useState();
+  const [editInputValue, setEditInputValue] =useState('');
+  const [editData,setEditData]=useState()
   const [postData,setPostData]=useState()
+  const [myimage, setMyImage] =useState(null);
   const [employeeDataForm, setEmployeeDataForm] = useState({
     userName: '',
     email: '',
@@ -161,7 +165,6 @@ export default function UserPage() {
     const value = event.target.value;
     setPostData(value);
   };
-
   const hadnleEmployeeOnchange = (e) => {
     e.persist()
     const name = e.target.name;
@@ -170,6 +173,7 @@ export default function UserPage() {
   };
   const handleImgChange=(e)=>{
     setImageUpload({image:e.target.files[0]})
+    setMyImage(URL.createObjectURL(e.target.files[0]));
   }
   const allReadyDataAlertFunctionClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -204,19 +208,6 @@ export default function UserPage() {
       setNewUserModel(false);
       setAllReadyDataAlert(false);
     }
-
-    // fetch('http://localhost:3004/employee', {
-    //   method: 'POST',  
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify(employeeDataForm),
-    // }).then((result) => {
-    //   result.json().then((resp) => {
-    //     console.log('resp', resp);
-    //     setAddEmployeeAlert(true)
-    //   });
-    // });
   };
   const validate = (values) => {
     console.log('welcome to validation');
@@ -226,8 +217,6 @@ export default function UserPage() {
       error.userName = 'user Name is required';
       setApicall(1);
       setApicall(1);
-      console.log(apicall, 'change api');
-      console.log('aaaa');
     } else if (values.userName.length < 3) {
       error.userName = 'user Name  more than 3 characters';
     } else if (values.userName.length > 10) {
@@ -272,22 +261,11 @@ export default function UserPage() {
     }
 
     setValidation(error);
-    console.log(validation, 'nnnnnnnnnnnnnnnnnnnnnnnnn')
-    console.log("dddd")
     return error;
   };
   const hadnleEmployeeSubmit = (e) => {
     e.preventDefault();
     setIsSubmit(true);
-    // setErrorForm(validate(employeeDataForm));
-    //    console.log("imageDataData",imageDataData)
-    // console.log('isSubmit', isSubmit);
-    // console.log('employeeDataForm', employeeDataForm);
-    // const data = users.filter((value) => {
-    //   return value.userName === employeeDataForm.userName && value.email === employeeDataForm.email;
-    // });
-
-      // if (data.length ===0) {
           var formData=new FormData()
           formData.append('image',imageUpload.image)
           formData.append('userName',employeeDataForm.userName)
@@ -297,46 +275,17 @@ export default function UserPage() {
           formData.append('mobileNumber',employeeDataForm.mobileNumber)
           formData.append('role',inputValue)
           console.log("img",formData)
-            //  axios.post(`http://127.0.0.1:8000/api/employee`,formData)
-            //  .then(res=>{
-            //   if(res.data.status===200){
-            //     swal("api Called",res.data.message)
-            //   }else if(res.data.status===422){
-            //       swal("api failed")
-            //   }
-            //  })
           if(formData){
         dispatch(addEmployeeApi(formData))
         setNewUserModel(false);
       }
-  //   console.log('yes');
-  // } else {
-  //   console.log('nooo');
-  // }
 }
 
-  useEffect(() => {
-    employeeGetApiFuction();
-  }, []);
-
-  const employeeGetApiFuction = () => {
-    fetch('http://localhost:3004/employee')
-      .then((res) => res.json())
-      .then((response) => setGetEmployeeData(response));
-  };
   const employeeDeleteApiFunction = (id) => {
     console.log('employeeEditId', employeeEditId.id);
    const employeeEditIdData= employeeEditId?.id
     if (id) {
       dispatch(deleteEmployeeApi(employeeEditIdData));
-      // fetch(`http://localhost:3004/employee/${employeeEditId?.id}`,{
-      //   method: 'DELETE'
-      // }).then((result)=>{
-      //   result.json().then((resp)=>{
-      //     console.log("resp",resp)
-      //     setEmployeeDeleteAlert(true)
-      //   })
-      // })
     }
   };
   const hadnleEditEmployeeOnchange = (e) => {
@@ -349,13 +298,16 @@ export default function UserPage() {
   const hadnleEditEmployeeSubmit = (e) => {
     e.preventDefault();
     setIsSubmit(true);
+    console.log("editData",editData)
     setErrorForm(validate(employeeEditForm));
     console.log('employeeEditForm', employeeEditForm);
     console.log("employeeEditForm",employeeEditForm?.id)
    const employeeEditIdData=employeeEditId?.id
+   console.log("edmplyessEditData",employeeEditIdData)
     if(employeeEditForm){
-      dispatch(updateEmployeeApi(employeeEditForm,employeeEditIdData));
-      setEmployeeEditModel(false);
+      console.log("employeeDataForm",employeeEditForm)
+      // dispatch(updateEmployeeApi(employeeEditForm,employeeEditIdData));
+      // setEmployeeEditModel(false);
     }
   };
 
@@ -377,8 +329,10 @@ export default function UserPage() {
     setEmployeeEditModel(false);
   };
 
-  const handleEditModelOpen = (item) => {
+  const   handleEditModelOpen = (item) => {
     setEmployeeEditModel(true);
+    console.log("item",item)
+    setEditData(item)
   };
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
@@ -473,7 +427,7 @@ export default function UserPage() {
             <Typography variant="h4" gutterBottom>
               Employee
             </Typography>
-            <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleNewUserModelOpen}>
+            <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" sx={{}} />} onClick={handleNewUserModelOpen}>
               New Employee
             </Button>
           </Stack>
@@ -498,14 +452,12 @@ export default function UserPage() {
                       : users &&
                         users?.map((item, index) => {
                           return (
-                            <TableBody>
-                              <TableRow hover key={item?.index} role="checkbox">
-                                <TableCell padding="checkbox">
-                                  <Checkbox />
-                                </TableCell>
+                            <TableBody key={item?.id}>
+                              <TableRow hover key={item?.id} >
+                              <TableCell align="center"></TableCell>
                                 <TableCell component="th" scope="row" padding="none">
                                   <Stack direction="row" alignItems="center" spacing={2}>
-                                    <Avatar alt={item?.userName} src={`https://hopeusers.hopeinfosys.com/${item?.image}`}/>
+                                    <Avatar alt={item?.userName} src={`https://hopebackend.hopeinfosys.com/${item?.image}`}/>
                                   </Stack>
                                 </TableCell>
                                 <TableCell align="center">{item?.E_Id}</TableCell>
@@ -513,7 +465,7 @@ export default function UserPage() {
                                 <TableCell align="center">{item?.role}</TableCell>
                                 <TableCell align="center">{item?.email}</TableCell>
                                 <TableCell align="center">{item?.mobileNumber}</TableCell>
-                                <TableCell align="center">{item?.salary}</TableCell>
+                                {/* <TableCell align="center">{item?.salary}</TableCell> */}
                                 <TableCell align="right">
                                   <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
                                     <Iconify
@@ -526,6 +478,7 @@ export default function UserPage() {
 
                               <Popover
                                 open={Boolean(open)}
+                                key={item?.id}
                                 anchorEl={open}
                                 onClose={handleCloseMenu}
                                 anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
@@ -558,44 +511,10 @@ export default function UserPage() {
                             </TableBody>
                           );
                         })}
-
-                    {/* {employeeGetData?.length===0 && (
-                      <TableBody>
-                        <TableRow>
-                          <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                            <Paper
-                              sx={{
-                                textAlign: 'center',
-                                marginLeft:"33%"
-                              }}
-                            >
-                              <Typography variant="h6" paragraph>
-                                Not found
-                              </Typography>
-
-                              <Typography variant="body2">
-                                No results found   &nbsp;
-                                <br />Please  Add Employee
-                              </Typography>
-                            </Paper>
-                          </TableCell>
-                        </TableRow>
-                      </TableBody>
-                    )} */}
                   </Table>
                 </div>
               </TableContainer>
             </Scrollbar>
-
-            {/* <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={USERLIST.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            /> */}
           </Card>
         </Container>
 
@@ -611,19 +530,21 @@ export default function UserPage() {
                 <form onSubmit={hadnleEmployeeSubmit}>
                   <div className='employee-img-upload'>
                   <Stack direction="row" alignItems="center" spacing={2}>
-                  
-                      {
-                        !preview?.length ?  
-                        <Button variant="contained" component="label"  className='upload-img'><img src={uploadImgIcon}/>   
+                 {
+                  imageUpload?.length===0?
+                  <div>
+                  <Button variant="contained" component="label" className='upload-img'>   <img src={uploadImgIcon} />
+                <input hidden   type="file" accept="image/png , image/jepg,.txt,.doc" id='image' name='image'  onChange={handleImgChange} />
+                 </Button>
+               </div>:<div>
+                    <Button variant="contained" component="label"  className='upload-img'><img src={myimage} width="80px" height="80px" />   
                           <input hidden   type="file" accept="image/png , image/jepg,.txt,.doc" id='image' name='image'  onChange={handleImgChange} />
                         </Button> 
-                        : 
-                        <Button variant="contained" component="label" className='preview-img'>   <img src={preview} />
-                        <input hidden   type="file" accept="image/png , image/jepg,.txt,.doc" id='image' name='image'  onChange={handleImgChange} />
-                      </Button> 
-                     
-                      }
-                   
+                   </div>
+                 }
+                
+            
+                      
                   </Stack>
                   </div>
                   <FormControl>
@@ -738,17 +659,20 @@ export default function UserPage() {
                     />
                     <p className="employee-error-text">{errorForm.userName}</p>
                   </FormControl>
-                  {/* <FormControl>
-                    <TextField
-                      label="Role"
-                      name="role"
-                      type="text"
-                      error={errorForm?.role}
-                      defaultValue={employeeEditId?.role}
-                      onChange={hadnleEditEmployeeOnchange}
-                    />
-                    <p className="employee-error-text">{errorForm.role}</p>
-                  </FormControl> */}
+                  <Autocomplete
+      sx={{ m: 1,width:"100%" }} size="small"
+        value={editValue}
+        onChange={(event, newValue) => {
+          setEditValue(newValue);
+        }}
+        inputValue={editInputValue}
+        onInputChange={(event, newInputValue) => {
+          setEditInputValue(newInputValue);
+        }}
+        id="controllable-states-demo"
+        options={postDataData}
+        renderInput={(params) => <TextField {...params} label="Post" />}
+      />
                   <FormControl>
                     <TextField
                       label="Mobile Number"

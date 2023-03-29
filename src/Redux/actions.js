@@ -45,7 +45,7 @@ const updateEmployee = () => ({
 });
 
 export const getEmployeeApi=()=>{
-  const url="https://hopeusers.hopeinfosys.com/api/viewemployee";
+  const url="https://hopebackend.hopeinfosys.com/api/viewemployee";
   return function (dispatch){
           axios.get(url)
           .then((resp)=>{
@@ -56,7 +56,7 @@ export const getEmployeeApi=()=>{
   };
 }
 export const addEmployeeApi = (users) => {
-  const url = 'https://hopeusers.hopeinfosys.com/api/employee';
+  const url = 'https://hopebackend.hopeinfosys.com/api/employee';
   return function (dispatch) {
     axios
       .post(url, users)
@@ -69,7 +69,7 @@ export const addEmployeeApi = (users) => {
   };
 };
 export const deleteEmployeeApi = (employeeEditIdData) => {
-  const dataaa = `https://hopeusers.hopeinfosys.com/api/deleteemployee/${employeeEditIdData}`;
+  const dataaa = `https://hopebackend.hopeinfosys.com/api/deleteemployee/${employeeEditIdData}`;
   return function (dispatch) {
     axios
       .delete(dataaa)
@@ -82,7 +82,7 @@ export const deleteEmployeeApi = (employeeEditIdData) => {
   };
 };
 export const updateEmployeeApi=(user,employeeEditIdData)=>{
-  const url=`https://hopeusers.hopeinfosys.com/api/updatesaveemployee/${employeeEditIdData}`;
+  const url=`https://hopebackend.hopeinfosys.com/api/updatesaveemployee/${employeeEditIdData}`;
   return function (dispatch){
           axios.put(url,user)
           .then((resp)=>{
@@ -94,7 +94,7 @@ export const updateEmployeeApi=(user,employeeEditIdData)=>{
   }
 }
 export const addFiledPostApi = (users) => {
-  const url = 'https://hopeusers.hopeinfosys.com/api/Uaddpost';
+  const url = 'https://hopebackend.hopeinfosys.com/api/Uaddpost';
   return function (dispatch) {
     axios
       .post(url, users)
@@ -107,7 +107,7 @@ export const addFiledPostApi = (users) => {
   };
 };
 export const getFiledPostApi=()=>{
-  const url="https://hopeusers.hopeinfosys.com/api/viewUaddpost";
+  const url="https://hopebackend.hopeinfosys.com/api/viewUaddpost";
   return function (dispatch){
           axios.get(url)
           .then((resp)=>{
@@ -118,7 +118,7 @@ export const getFiledPostApi=()=>{
   };
 }
 export const deletePostApi = (employeeEditIdData) => {
-  const dataaa = `https://hopeusers.hopeinfosys.com/api/Uaddpostdelete/${employeeEditIdData}`;
+  const dataaa = `https://hopebackend.hopeinfosys.com/api/Uaddpostdelete/${employeeEditIdData}`;
   return function (dispatch) {
     axios
       .delete(dataaa)
@@ -131,7 +131,7 @@ export const deletePostApi = (employeeEditIdData) => {
   };
 };
 export const attendanceGetApi=()=>{
-  const url="https://hopeusers.hopeinfosys.com/api/viewUattendence";
+  const url="https://hopebackend.hopeinfosys.com/api/viewUattendence";
   return function (dispatch){
           axios.get(url)
           .then((resp)=>{
