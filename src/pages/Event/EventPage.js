@@ -119,39 +119,23 @@
 //   )
 // }
 import React from 'react'
-import GoogleLogin from 'react-google-login'
 
 export default function EventPage() {
   const BASE_CALENDAR_URL = "https://www.googleapis.com/calendar/v3/calendars";
   const BASE_CALENDAR_ID_FOR_PUBLIC_HOLIDAY =
     "holiday@group.v.calendar.google.com"; // Calendar Id. This is public but apparently not documented anywhere officialy.
-  const API_KEY = "AIzaSyAFBIgwTRTbGuzkNSqx-HIIAn0sGmq_tkU";
-  const CALENDAR_REGION = "en.indian";
-  const url = `${BASE_CALENDAR_URL}/${CALENDAR_REGION}%24${BASE_CALENDAR_ID_FOR_PUBLIC_HOLIDAY}/events?key=${API_KEY}`
+  const API_KEY = "AIzaSyB6grzevpHe0eFFs8XwktXRU_jzr63_x8A";
+  const CALENDAR_REGION = "en.indian"; // This variable refers to region whose holidays do we need to fetch
+  const url = `${BASE_CALENDAR_URL}/${CALENDAR_REGION}%23${BASE_CALENDAR_ID_FOR_PUBLIC_HOLIDAY}/events?key=${API_KEY}`
 
   fetch(url).then(response => response.json()).then(data => {
   const holidays = data.items;
-  console.log("holidays",holidays)
+  console.log("holidata",holidays)
   })
-
-  const responseGoogle=response=>{
-    console.log("Response",response)
-  }
-
-  const responseError=error=>{
-    console.log(error)
-  }
+  
   return (
     <div>
-      <GoogleLogin 
-      clientId='907798487065-cvtv582dud6snimgi6sbsifpfr681s0k.apps.googleusercontent.com' 
-      onSuccess={responseGoogle} 
-      onFailure={responseError} 
-      cookiePolicy={'single_host_origin'}
-       responseType='code'
-       accessType='offline'
-       scope='openid email profile https://www.googleapis.com/calendat'
-      />
+     
 <iframe src="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Example+Google+Calendar+Event&details=More+help+see:+https://support.google.com/calendar/thread/81344786&dates=20201231T160000/20201231T170000&recur=RRULE:FREQ%3DWEEKLY "  width="800" height="600" frameborder="0" scrolling="no"></iframe>
     </div>
   )
