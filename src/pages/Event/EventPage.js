@@ -127,12 +127,13 @@ export default function EventPage() {
     "holiday@group.v.calendar.google.com"; // Calendar Id. This is public but apparently not documented anywhere officialy.
   const API_KEY = "AIzaSyAFBIgwTRTbGuzkNSqx-HIIAn0sGmq_tkU";
   const CALENDAR_REGION = "en.indian";
-  const url = `${BASE_CALENDAR_URL}/${CALENDAR_REGION}%24${BASE_CALENDAR_ID_FOR_PUBLIC_HOLIDAY}/events?key=${API_KEY}`
+  const url = `${BASE_CALENDAR_URL}/${CALENDAR_REGION}%23${BASE_CALENDAR_ID_FOR_PUBLIC_HOLIDAY}/events?key=${API_KEY}`
 
   fetch(url).then(response => response.json()).then(data => {
   const holidays = data.items;
-  console.log("holidays",holidays)
+  console.log("holiday",holidays)
   })
+  
 
   const responseGoogle=response=>{
     console.log("Response",response)
