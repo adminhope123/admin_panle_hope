@@ -4,7 +4,9 @@ const initialState = {
   users: [],
   user: {},
   loading: true,
-  validation:[]
+  validation:[], 
+  events: [],
+  event: {},
 };
 
 const usersReducers = (state = initialState, action) => {
@@ -45,6 +47,11 @@ const usersReducers = (state = initialState, action) => {
         ...state,
         loading: false,
       };
+      case type.EVENT_POST:
+        return {
+          ...state,
+          loading: false,
+        };
       case type.GET_POST_FIELD:
         return {
           ...state,
