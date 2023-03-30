@@ -1,5 +1,7 @@
 .event-page{
-
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
 }
 .event-page .fc-media-screen {
     width: 77%;
