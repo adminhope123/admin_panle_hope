@@ -37,7 +37,9 @@ const getFiled = (users) => ({
   type: type.GET_POST_FIELD,
   payload: users,
 });
-
+const eventAdd = () => ({
+  type: type.EVENT_POST,
+});
 
 
 const updateEmployee = () => ({
@@ -141,3 +143,16 @@ export const attendanceGetApi=()=>{
       .catch((error)=>console.log("error",error));
   };
 }
+
+export const eventAddApi = (events) => {
+  const url = 'https://hopebackend.hopeinfosys.com/api/Uaddpost';
+  return function (dispatch) {
+    axios
+      .post(url, events)
+      .then((resp) => {
+        console.log('resp', resp.data);
+        dispatch(eventAdd());
+      })
+      .catch((error) => console.log('error', error));
+  };
+};
