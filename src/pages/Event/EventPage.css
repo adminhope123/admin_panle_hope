@@ -1,11 +1,28 @@
 .event-page{
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
+
 }
 .event-page .fc-media-screen {
     width: 77%;
+    height: calc(100vh - 138px);
 }
+.event-page .MuiTableRow-root th:nth-child(1){
+    display: none;
+}
+.fc-daygrid-body table{
+    height: 100%;
+}
+.event-page .event-calander{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+/* .event-page .MuiTableCell-root {
+    position: absolute;
+    right: 0;
+}
+.event-page .MuiTableBody-root {
+    position: relative;
+} */
 .event-page .MuiContainer-root{
     display: flex;
     align-items: flex-start;
@@ -15,9 +32,6 @@
     display: flex;
     margin-bottom: 6px;
     align-items: center;
-}
-.event-page .demo-app-sidebar{
-    width: 23%;
 }
 .event-page .demo-app-sidebar-section ul li b{
     font-size: 14px;
