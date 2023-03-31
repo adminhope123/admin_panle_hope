@@ -8,6 +8,8 @@ import { INITIAL_EVENTS, createEventId } from './EventList'
 import { Container } from '@mui/system'
 import { Box, Table, TableBody, TableCell, TableRow } from '@mui/material'
 import { UserListHead } from 'src/sections/@dashboard/user'
+import { useDispatch } from 'react-redux'
+import { eventAddApi } from 'src/Redux/actions'
 
 const TABLE_HEAD = [
   { id: 'date', label: 'Date', alignRight: false },
@@ -19,6 +21,7 @@ export default function EventPage() {
   const [currentEvents, setCurrentEvents] = useState([])
   const [eventData, setEventData] = useState()
   const [holidayEvent, setHolidayEvent] = useState()
+  const dispatch=useDispatch()
 
   const getFunction = () => {
     const colorData = [
@@ -35,7 +38,7 @@ export default function EventPage() {
     const BASE_CALENDAR_URL = "https://www.googleapis.com/calendar/v3/calendars";
     const BASE_CALENDAR_ID_FOR_PUBLIC_HOLIDAY =
       "holiday@group.v.calendar.google.com"; // Calendar Id. This is public but apparently not documented anywhere officialy.
-    const API_KEY = "AIzaSyAFBIgwTRTbGuzkNSqx-HIIAn0sGmq_tkU";
+    const API_KEY = "AIzaSyBQe3Zh0Z0aNzrzRaH7I6-UUhfy8l8P2nc";
     const CALENDAR_REGION = "en.indian";
     const url = `${BASE_CALENDAR_URL}/${CALENDAR_REGION}%23${BASE_CALENDAR_ID_FOR_PUBLIC_HOLIDAY}/events?key=${API_KEY}`
 
@@ -53,12 +56,24 @@ export default function EventPage() {
         const getDateDAtaDAta = { "start": item?.start?.date }
         const getHolidayName = { "title": item?.summary }
         const mergeObject = { ...getDateData, ...getDateDAtaDAta, ...getHolidayName, ...eventColor }
+        console.log("mergeObject",mergeObject)
+        // dispatch(eventAddApi(mergeObject))
         return mergeObject
       })
       if (holidayData) {
+        const filterData=holidayData?.splice(0, 20).map(_data => {
+          return _data;
+})
+
+        const filterDataData=filterData?.map((item)=>{
+          if(item){
+            dispatch(eventAddApi(item))
+          }
+        })
+        console.log("filterData",filterDataData)
         setHolidayEvent(holidayData)
         console.log("holiday", holidays)
-        console.log("holidayData", holidayData)
+        console.log("holiday", holidayData)
 
       }
 
