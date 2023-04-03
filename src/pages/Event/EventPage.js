@@ -16,6 +16,17 @@ const TABLE_HEAD = [
   { id: 'event', label: 'Event', alignRight: false },
 ];
 
+const colorData = [
+  '#2196f3',
+  '#31dc7f',
+  '#2cc0c1',
+  '#dc3131',
+  '#d25ee6',
+  '#dc9931',
+  '#ffeb3b',
+  '#307cbf'
+]
+
 export default function EventPage() {
   const [weekendsVisible, setWeekendsVisible] = useState()
   const [currentEvents, setCurrentEvents] = useState([])
@@ -24,16 +35,7 @@ export default function EventPage() {
   const dispatch=useDispatch()
 
   const getFunction = () => {
-    const colorData = [
-      '#2196f3',
-      '#31dc7f',
-      '#2cc0c1',
-      '#dc3131',
-      '#d25ee6',
-      '#dc9931',
-      '#ffeb3b',
-      '#307cbf'
-    ]
+
 
     const BASE_CALENDAR_URL = "https://www.googleapis.com/calendar/v3/calendars";
     const BASE_CALENDAR_ID_FOR_PUBLIC_HOLIDAY =
@@ -49,31 +51,28 @@ export default function EventPage() {
         item?.end?.date
         const random = Math.ceil(Math.random() * 7);
         const dataColor = colorData[random];
-        console.log("dataColor", dataColor)
-
         const eventColor = { "color": dataColor }
         const getDateData = { "end": item?.end?.date }
         const getDateDAtaDAta = { "start": item?.start?.date }
         const getHolidayName = { "title": item?.summary }
         const mergeObject = { ...getDateData, ...getDateDAtaDAta, ...getHolidayName, ...eventColor }
-        console.log("mergeObject",mergeObject)
         // dispatch(eventAddApi(mergeObject))
         return mergeObject
       })
+      const filterDate = {
+        start_date: "2019-11-04T00:00:00Z",
+        end_date: "2019-11-07T23:59:59Z",
+      };
+
       if (holidayData) {
         const filterData=holidayData?.splice(0, 20).map(_data => {
           return _data;
-})
+})    
 
-        const filterDataData=filterData?.map((item)=>{
-          if(item){
-            dispatch(eventAddApi(item))
-          }
+  const filterDataData=filterData?.map((item)=>{
+          //  dispatch(eventAddApi(item))
         })
-        console.log("filterData",filterDataData)
         setHolidayEvent(holidayData)
-        console.log("holiday", holidays)
-        console.log("holiday", holidayData)
 
       }
 
@@ -91,7 +90,6 @@ export default function EventPage() {
       if (data) {
         setEventData(data)
       }
-      console.log("eventData", eventData)
     }, 1000);
   }
 
@@ -102,14 +100,30 @@ export default function EventPage() {
     calendarApi.unselect() // clear date selection
 
     if (title) {
-      calendarApi.addEvent({
+    const selectData=  calendarApi.addEvent({
         id: createEventId(),
         title,
         start: selectInfo.startStr,
         end: selectInfo.endStr,
         allDay: selectInfo.allDay
       })
+
+      const titleData=selectData?._def?.title
+      const startData=selectData?._instance?.range?.start
+      const getStartData=startData?.toLocaleDateString('en-CA')
+      const endData=selectData?._instance?.range?.end
+      const getEndData=endData?.toLocaleDateString('en-CA')
+      const random = Math.ceil(Math.random() * 7);
+      const dataColor = colorData[random];
+      const dataTitle={"title":titleData}
+      const startDataDAta={"start":getStartData}
+      const endDAtaData={"end":getEndData}
+      const colorDAtaData={"color":dataColor}
+      const mergeData={...dataTitle,...startDataDAta,...endDAtaData,...colorDAtaData}
+      console.log("mergeDAta",mergeData)
+      dispatch(eventAddApi(mergeData))
     }
+
   }
   function renderEventContent(eventInfo) {
     return (

@@ -145,7 +145,7 @@ export const attendanceGetApi=()=>{
 }
 
 export const eventAddApi = (events) => {
-  const url = 'https://hopebackend.hopeinfosys.com/api/calender';
+  const url = 'https://hopebackend.hopeinfosys.com/api/calendar';
   return function (dispatch) {
     axios
       .post(url, events)
