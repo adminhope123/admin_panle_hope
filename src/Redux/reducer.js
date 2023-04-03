@@ -52,6 +52,17 @@ const usersReducers = (state = initialState, action) => {
           ...state,
           loading: false,
         };
+        case type.EVENT_GET:
+      return {
+        ...state,
+        events: action.payload,
+        loading: false,
+      };
+      case type.EVENT_DELETE:
+        return {
+          ...state,
+          loading: false,
+        };
       case type.GET_POST_FIELD:
         return {
           ...state,

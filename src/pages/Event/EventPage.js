@@ -8,8 +8,9 @@ import { INITIAL_EVENTS, createEventId } from './EventList'
 import { Container } from '@mui/system'
 import { Box, Table, TableBody, TableCell, TableRow } from '@mui/material'
 import { UserListHead } from 'src/sections/@dashboard/user'
-import { useDispatch } from 'react-redux'
-import { eventAddApi } from 'src/Redux/actions'
+import { useDispatch, useSelector } from 'react-redux'
+import { deleteEventApi, eventAddApi, eventGetApi } from 'src/Redux/actions'
+import LoaderComp from '../loader/LoaderComp'
 
 const TABLE_HEAD = [
   { id: 'date', label: 'Date', alignRight: false },
@@ -32,56 +33,54 @@ export default function EventPage() {
   const [currentEvents, setCurrentEvents] = useState([])
   const [eventData, setEventData] = useState()
   const [holidayEvent, setHolidayEvent] = useState()
+  const {events}=useSelector(res=>res.data)
   const dispatch=useDispatch()
 
   const getFunction = () => {
+dispatch(eventGetApi())
+//     const BASE_CALENDAR_URL = "https://www.googleapis.com/calendar/v3/calendars";
+//     const BASE_CALENDAR_ID_FOR_PUBLIC_HOLIDAY =
+//       "holiday@group.v.calendar.google.com"; // Calendar Id. This is public but apparently not documented anywhere officialy.
+//     const API_KEY = "AIzaSyBQe3Zh0Z0aNzrzRaH7I6-UUhfy8l8P2nc";
+//     const CALENDAR_REGION = "en.indian";
+//     const url = `${BASE_CALENDAR_URL}/${CALENDAR_REGION}%23${BASE_CALENDAR_ID_FOR_PUBLIC_HOLIDAY}/events?key=${API_KEY}`
 
 
-    const BASE_CALENDAR_URL = "https://www.googleapis.com/calendar/v3/calendars";
-    const BASE_CALENDAR_ID_FOR_PUBLIC_HOLIDAY =
-      "holiday@group.v.calendar.google.com"; // Calendar Id. This is public but apparently not documented anywhere officialy.
-    const API_KEY = "AIzaSyBQe3Zh0Z0aNzrzRaH7I6-UUhfy8l8P2nc";
-    const CALENDAR_REGION = "en.indian";
-    const url = `${BASE_CALENDAR_URL}/${CALENDAR_REGION}%23${BASE_CALENDAR_ID_FOR_PUBLIC_HOLIDAY}/events?key=${API_KEY}`
+//     fetch(url).then(response => response.json()).then(data => {
+//       const holidays = data.items;
+//       const holidayData = holidays?.map((item) => {
+//         item?.end?.date
+//         const random = Math.ceil(Math.random() * 7);
+//         const dataColor = colorData[random];
+//         const eventColor = { "color": dataColor }
+//         const getDateData = { "end": item?.end?.date }
+//         const getDateDAtaDAta = { "start": item?.start?.date }
+//         const getHolidayName = { "title": item?.summary }
+//         const mergeObject = { ...getDateData, ...getDateDAtaDAta, ...getHolidayName, ...eventColor }
+//         // dispatch(eventAddApi(mergeObject))
+//         return mergeObject
+//       })
+//       if (holidayData) {
+//         const filterData=holidayData?.splice(0, 20).map(_data => {
+//           return _data;
+// })    
 
+//   const filterDataData=filterData?.map((item)=>{
+//           //  dispatch(eventAddApi(item))
+//         })
+//         setHolidayEvent(holidayData)
 
-    fetch(url).then(response => response.json()).then(data => {
-      const holidays = data.items;
-      const holidayData = holidays?.map((item) => {
-        item?.end?.date
-        const random = Math.ceil(Math.random() * 7);
-        const dataColor = colorData[random];
-        const eventColor = { "color": dataColor }
-        const getDateData = { "end": item?.end?.date }
-        const getDateDAtaDAta = { "start": item?.start?.date }
-        const getHolidayName = { "title": item?.summary }
-        const mergeObject = { ...getDateData, ...getDateDAtaDAta, ...getHolidayName, ...eventColor }
-        // dispatch(eventAddApi(mergeObject))
-        return mergeObject
-      })
-      const filterDate = {
-        start_date: "2019-11-04T00:00:00Z",
-        end_date: "2019-11-07T23:59:59Z",
-      };
+//       }
 
-      if (holidayData) {
-        const filterData=holidayData?.splice(0, 20).map(_data => {
-          return _data;
-})    
-
-  const filterDataData=filterData?.map((item)=>{
-          //  dispatch(eventAddApi(item))
-        })
-        setHolidayEvent(holidayData)
-
-      }
-
-    })
+//     })
   }
+
+useEffect(() => {
+  getFunction()
+}, [])
 
   useEffect(() => {
     apiPostFunction()
-    getFunction()
   }, [])
 
   const apiPostFunction = () => {
@@ -135,7 +134,15 @@ export default function EventPage() {
   }
   const handleEventClick = (clickInfo) => {
     if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-      clickInfo.event.remove()
+      const dataGet=clickInfo?.el?.fcSeg?.eventRange?.range?.start
+      const dataGetDAta=dataGet?.toLocaleDateString('en-CA')
+      const dataFilterTitle=clickInfo?.event?._def?.title
+      const dataFilter=events?.filter((item)=>item?.start===dataGetDAta&&item?.title===dataFilterTitle)
+      const getId=dataFilter?.map((item)=>{return item?.id})
+      if(getId){
+        const employeeEditIdData=getId
+        dispatch(deleteEventApi(employeeEditIdData))
+      }
     }
   }
   const handleEvents = (events) => {
@@ -179,31 +186,31 @@ export default function EventPage() {
   return (
     <div className='event-page'>
       {
-        holidayEvent ? <FullCalendar
-          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-          headerToolbar={{
-            left: 'prev,next today',
-            center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay'
-          }}
-          initialView='dayGridMonth'
-          editable={true}
-          selectable={true}
-          selectMirror={true}
-          initialEvents={holidayEvent}
-          dayMaxEvents={true}
-          weekends={weekendsVisible}
-          // initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed
-          select={handleDateSelect}
-          eventContent={renderEventContent} // custom render function
-          eventClick={handleEventClick}
-          eventsSet={handleEvents} // called after events are initialized/added/changed/removed
-        /* you can update a remote database when these fire:
-        eventAdd={function(){}}
-        eventChange={function(){}}
-        eventRemove={function(){}}
-        */
-        /> : ""
+        events.length===0     ? <LoaderComp/>:<FullCalendar
+        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+        headerToolbar={{
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        }}
+        initialView='dayGridMonth'
+        editable={true}
+        selectable={true}
+        selectMirror={true}
+        initialEvents={events}
+        dayMaxEvents={true}
+        weekends={weekendsVisible}
+        // initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed
+        select={handleDateSelect}
+        eventContent={renderEventContent} // custom render function
+        eventClick={handleEventClick}
+        eventsSet={handleEvents} // called after events are initialized/added/changed/removed
+      /* you can update a remote database when these fire:
+      eventAdd={function(){}}
+      eventChange={function(){}}
+      eventRemove={function(){}}
+      */
+      />
       }
       {renderSidebar()}
     </div>

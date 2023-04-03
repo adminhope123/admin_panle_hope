@@ -34,13 +34,20 @@ const addFiledPost = () => ({
   type: type.ADD_POST_FIELD,
 });
 const getFiled = (users) => ({
-  type: type.GET_POST_FIELD,
+  type: type.EVENT_GET,
   payload: users,
 });
 const eventAdd = () => ({
   type: type.EVENT_POST,
 });
+const eventGet = (events) => ({
+  type: type.EVENT_GET,
+  payload: events,
+});
 
+const deleteEvent = () => ({
+  type: type.EMPLOYEE_DELETE,
+});
 
 const updateEmployee = () => ({
   type: type.EMPLOYEE_UPDATE,
@@ -144,14 +151,40 @@ export const attendanceGetApi=()=>{
   };
 }
 
-export const eventAddApi = (events) => {
+export const eventAddApi = (event) => {
   const url = 'https://hopebackend.hopeinfosys.com/api/calendar';
   return function (dispatch) {
     axios
-      .post(url, events)
+      .post(url, event)
       .then((resp) => {
         console.log('resp', resp.data);
         dispatch(eventAdd());
+        dispatch(eventGetApi())
+      })
+      .catch((error) => console.log('error', error));
+  };
+};
+
+export const eventGetApi=()=>{
+  const url="https://hopebackend.hopeinfosys.com/api/viewcalendar";
+  return function (dispatch){
+          axios.get(url)
+          .then((resp)=>{
+          console.log("resp",resp)
+          dispatch(eventGet(resp.data))
+      })
+      .catch((error)=>console.log("error",error));
+  };
+}
+export const deleteEventApi = (employeeEditIdData) => {
+  const dataaa = `https://hopebackend.hopeinfosys.com/api/deletecalendar/${employeeEditIdData}`;
+  return function (dispatch) {
+    axios
+      .delete(dataaa)
+      .then((resp) => {
+        console.log('resp', resp);
+        dispatch(deleteEvent());
+        dispatch(eventGetApi());
       })
       .catch((error) => console.log('error', error));
   };

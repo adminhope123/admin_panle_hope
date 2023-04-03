@@ -1,0 +1,49 @@
+.c-leaf {
+    position: relative;
+    
+    overflow: hidden;
+    margin: 0 auto;
+    background: #c1c9d1;
+    transform: scale(1);
+    border-radius: 117px;
+    width: 100px;
+    height: 100px;
+    transform: scale(1);
+}
+
+.c-leaf__icon {
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    z-index: 1;
+    width: 100px;
+    height: 100px;
+        
+    fill: #fff;
+}
+.c-leaf__fill {
+    width:100px;
+    height:100px;
+    
+    background:#7Fbc5b;
+            
+    animation: fillUp 1.5s ease-in-out infinite;
+}
+@keyframes fillUp {
+    0% {
+        transform: translate(0, 100px);
+    }
+    100% {
+        transform: translate(0, -100px);
+    }
+}
+
+.x-reset-container {
+    display: flex;
+    align-items: center;
+    padding: 50px;
+    left: 50%;
+    position: absolute;
+    top: 0;
+    height: calc(100vh - 132px);
+}
