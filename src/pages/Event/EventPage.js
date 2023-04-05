@@ -6,8 +6,9 @@ import './EventPage.css'
 import React, { useEffect, useState } from 'react'
 import { INITIAL_EVENTS, createEventId } from './EventList'
 import { Container } from '@mui/system'
-import { Box, Table, TableBody, TableCell, TableRow } from '@mui/material'
+import { Box, Table, TableBody, TableCell,Button, TableRow } from '@mui/material'
 import { UserListHead } from 'src/sections/@dashboard/user'
+import RefreshIcon from '@mui/icons-material/Refresh';
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteEventApi, eventAddApi, eventGetApi } from 'src/Redux/actions'
 import LoaderComp from '../loader/LoaderComp'
@@ -135,12 +136,9 @@ export default function EventPage() {
       const deletEvent={"deleteevent":1}
       const mergeData = { ...dataTitle, ...startDataDAta, ...endDAtaData,...deletEvent, ...colorDAtaData }
       console.log("mergeDAta", mergeData)
-      const dataCheck=events?.map((item)=>{
-        const dataCheckData=item?.starte===mergeData?.start&&mergeData?.title
-        return dataCheckData
-      })
-      console.log("dataCheck",dataCheck)
-      if(dataCheck==false){
+      console.log("getStartData",getStartData)
+      const dataCheck=mergeData?.start?.includes(getStartData)
+      if(dataCheck==true){
         dispatch(eventAddApi(mergeData))
       }
     }
@@ -210,8 +208,10 @@ export default function EventPage() {
 
   return (
     <div className='event-page'>
-        <button onClick={handleDateSelect}>ssssssss</button>
-      <button onClick={getFunction}>dddddddd</button>
+      <Button  variant="contained" onClick={() => getFunction()} sx={{marginBottom:"30px"}}>
+           <span> Data Refresh</span>
+          <RefreshIcon sx={{marginLeft:"10px"}}/>
+          </Button>
       {
         events.length === 0 ? <LoaderComp /> : <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
