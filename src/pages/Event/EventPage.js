@@ -45,12 +45,12 @@ export default function EventPage() {
       ""
     }else{
       const liveDate = new Date().toLocaleDateString('en-CA')
-      const getMonthData = liveDate?.slice(8, 10)
+      const getMonthData = liveDate?.slice(5, 7)
+      console.log("getMonmt",getMonthData)
       const dataFilter = events?.filter((item) =>
         item?.start?.slice(5, 7) === getMonthData
       )
       setHolidayEvent(dataFilter)
-      console.log("item", dataFilter)
     }
     //     const BASE_CALENDAR_URL = "https://www.googleapis.com/calendar/v3/calendars";
     //     const BASE_CALENDAR_ID_FOR_PUBLIC_HOLIDAY =
@@ -130,13 +130,10 @@ export default function EventPage() {
       const dataColor = colorData[random];
       const dataTitle = { "title": titleData }
       const startDataDAta = { "start": getStartData }
-      console.log("startDataDAta",startDataDAta)
       const endDAtaData = { "end": getEndData }
       const colorDAtaData = { "color": dataColor }
       const deletEvent={"deleteevent":1}
       const mergeData = { ...dataTitle, ...startDataDAta, ...endDAtaData,...deletEvent, ...colorDAtaData }
-      console.log("mergeDAta", mergeData)
-      console.log("getStartData",getStartData)
       const dataCheck=mergeData?.start?.includes(getStartData)
       if(dataCheck==true){
         dispatch(eventAddApi(mergeData))
