@@ -135,7 +135,7 @@ export const deletePostApi = (employeeEditIdData) => {
         console.log('resp', resp);
         dispatch(deletePostData());
         dispatch(getFiledPostApi());
-      })
+      })                                                                   
       .catch((error) => console.log('error', error));
   };
 };

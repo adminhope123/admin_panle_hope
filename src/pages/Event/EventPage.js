@@ -24,7 +24,7 @@ const colorData = [
   '#2cc0c1',
   '#dc3131',
   '#d25ee6',
-  '#dc9931',
+  '#E5CCFF',
   '#ffeb3b',
   '#307cbf'
 ]
@@ -132,9 +132,17 @@ export default function EventPage() {
       console.log("startDataDAta",startDataDAta)
       const endDAtaData = { "end": getEndData }
       const colorDAtaData = { "color": dataColor }
-      const mergeData = { ...dataTitle, ...startDataDAta, ...endDAtaData, ...colorDAtaData }
+      const deletEvent={"deleteevent":1}
+      const mergeData = { ...dataTitle, ...startDataDAta, ...endDAtaData,...deletEvent, ...colorDAtaData }
       console.log("mergeDAta", mergeData)
-      dispatch(eventAddApi(mergeData))
+      const dataCheck=events?.map((item)=>{
+        const dataCheckData=item?.starte===mergeData?.start&&mergeData?.title
+        return dataCheckData
+      })
+      console.log("dataCheck",dataCheck)
+      if(dataCheck==false){
+        dispatch(eventAddApi(mergeData))
+      }
     }
 
   }
@@ -153,10 +161,13 @@ export default function EventPage() {
       const dataFilterTitle = clickInfo?.event?._def?.title
       const dataFilter = events?.filter((item) => item?.start === dataGetDAta && item?.title === dataFilterTitle)
       const getId = dataFilter?.map((item) => { return item?.id })
-      if (getId) {
-        const employeeEditIdData = getId
-        dispatch(deleteEventApi(employeeEditIdData))
-      }
+      console.log("dataFilter",dataFilter)
+      const dataDelete=dataFilter?.map((item)=>{return item?.deleteevent})
+        const dataCheck=dataDelete?.includes(1)
+          const employeeEditIdData = getId
+          if(dataCheck===true){
+            dispatch(deleteEventApi(employeeEditIdData))
+          }
     }
   }
   const handleEvents = (events) => {
@@ -199,7 +210,8 @@ export default function EventPage() {
 
   return (
     <div className='event-page'>
-      <button onClick={getFunction}>Click</button>
+        <button onClick={handleDateSelect}>ssssssss</button>
+      <button onClick={getFunction}>dddddddd</button>
       {
         events.length === 0 ? <LoaderComp /> : <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -229,6 +241,7 @@ export default function EventPage() {
       }
       <div className='demo-app-sidebar-section'>
         <h2>All Events ({holidayEvent?.length})</h2>
+      
         <Table>
           <UserListHead
             headLabel={TABLE_HEAD}
