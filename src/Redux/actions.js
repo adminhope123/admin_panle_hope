@@ -40,6 +40,12 @@ const getFiled = (users) => ({
 const eventAdd = () => ({
   type: type.EVENT_POST,
 });
+const getTimeData=(users)=>({
+  type:type.TIME_IN_API_GET_DATA,
+  payload:users
+})
+
+
 const eventGet = (events) => ({
   type: type.EVENT_GET,
   payload: events,
@@ -90,6 +96,17 @@ export const deleteEmployeeApi = (employeeEditIdData) => {
       .catch((error) => console.log('error', error));
   };
 };
+export const getTimeDataApi=()=>{
+  const url="https://hopebackend.hopeinfosys.com/api/viewtimer";
+  return function (dispatch){
+          axios.get(url)
+          .then((resp)=>{
+          dispatch(getTimeData(resp.data))
+      })
+      .catch((error)=>console.log("error",error));
+  };
+}
+
 export const updateEmployeeApi=(user,employeeEditIdData)=>{
   const url=`https://hopebackend.hopeinfosys.com/api/updatesaveemployee/${employeeEditIdData}`;
   return function (dispatch){

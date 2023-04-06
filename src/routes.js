@@ -11,6 +11,7 @@ import DashboardAppPage from './pages/DashboardAppPage';
 import EventPage from './pages/Event/EventPage';
 import EmployeeAttendance from './pages/EmployeeTimer/EmployeeAttendance';
 import AllStaffMembers from './pages/AllStaffMembers';
+import ActivePage from './pages/ActivePage';
 
 // ----------------------------------------------------------------------
 
@@ -23,6 +24,7 @@ export default function Router() {
         { element: <Navigate to="/dashboard/app" />, index: true },
         { path: 'app', element: <DashboardAppPage /> },
         { path: 'employee', element: <UserPage /> },
+        { path: 'employeestatus', element: <ActivePage /> },
         { path: 'employeeAttendance', element: < EmployeeAttendance/> },
         { path: 'allstaffmembers', element: <AllStaffMembers /> },
         { path: 'event', element: <EventPage /> },

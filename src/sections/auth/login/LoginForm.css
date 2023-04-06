@@ -1,0 +1,7 @@
+.alertLogin{
+    position: absolute !important;
+    top: 27px !important;
+    right: 18px !important;
+    bottom: unset !important;
+    left: unset !important;
+}

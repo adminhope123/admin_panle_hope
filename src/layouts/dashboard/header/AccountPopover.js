@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 // @mui
 import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, Popover } from '@mui/material';
@@ -13,36 +13,47 @@ const MENU_OPTIONS = [
   {
     label: 'Home',
     icon: 'eva:home-fill',
+    link:'/dashboard/app'
   },
   {
-    label: 'Profile',
+    label: 'Employee',
     icon: 'eva:person-fill',
+    link:'/dashboard/employee'
   },
   {
-    label: 'Settings',
-    icon: 'eva:settings-2-fill',
-  },
+    label: 'All Staff Members',
+    icon: 'eva:person-fill',
+    link:'/dashboard/allstaffmembers'
+  }
 ];
 
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
   const [open, setOpen] = useState(null);
-  const {userGetData}=useContext(UserDataContext)
-  const navigate = useNavigate();
+  const navigate=useNavigate()
+  const [userData,setUserData]=useState()
 
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
   };
 
-  const handleClose = () => {
+  useEffect(() => {
+    getUserData()
+  }, [])
+  
+  const getUserData=()=>{
+    const getData=JSON.parse(sessionStorage.getItem("userData"))
+    setUserData(getData)
+  }
+  const handleClose = (option) => {
     setOpen(null);
+    navigate(option?.link)
   };
-
+ 
   const logOutFunction=()=>{
     setOpen(null);
     location.reload()
-    console.log("loOut")
      const logOut=sessionStorage.removeItem("loginData")
       navigate('/login')
 
@@ -50,7 +61,7 @@ export default function AccountPopover() {
 
   return (
     <>
-      <IconButton
+   <IconButton
         onClick={handleOpen}
         sx={{
           p: 0,
@@ -67,7 +78,8 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <Avatar src={account.photoURL} alt="photoURL" />
+        {userData?  <Avatar  src={`https://hopebackend.hopeinfosys.com/${userData&&userData?.image}`} alt={userData?.userName} />:""}
+      
       </IconButton>
 
       <Popover
@@ -91,10 +103,10 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {account.displayName}
+            {userData?.userName}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {account.email}
+            {userData?.email}
           </Typography>
         </Box>
 
@@ -102,7 +114,7 @@ export default function AccountPopover() {
 
         <Stack sx={{ p: 1 }}>
           {MENU_OPTIONS.map((option) => (
-            <MenuItem key={option.label} onClick={handleClose}>
+            <MenuItem key={option.label} onClick={()=>handleClose(option)}>
               {option.label}
             </MenuItem>
           ))}

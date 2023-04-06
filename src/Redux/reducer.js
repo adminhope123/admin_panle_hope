@@ -17,6 +17,7 @@ const usersReducers = (state = initialState, action) => {
         users: action.payload,
         loading: false,
       };
+      
     case type.EMPLOYEE_ADD:
       return {
         ...state,
@@ -37,6 +38,12 @@ const usersReducers = (state = initialState, action) => {
         ...state,
         loading: false,
       };
+      case type.TIME_IN_API_GET_DATA:
+        return {
+          ...state,
+          users: action.payload,
+          loading: false,
+        };
       case type.ERRORVALIDATION:
         return {
           ...state,

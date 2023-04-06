@@ -14,16 +14,17 @@ import LoginPage from './pages/LoginPage';
 // ----------------------------------------------------------------------
 
 export default function App() {
-  const navigate=useNavigate()
-   const [loginSuccess,setLoginSuccess]=useState()
-useEffect(() => {
-        var login=sessionStorage.getItem("loginData")
-        setLoginSuccess(login)
-        if(!login){
-           navigate('/login')
-           sessionStorage.removeItem("/login")
-        }
-    }, [])
+//   const navigate=useNavigate()
+//    const [loginSuccess,setLoginSuccess]=useState()
+// useEffect(() => {
+//         var login=sessionStorage.getItem("loginData")
+//         setLoginSuccess(login)
+//         if(!login){
+//            navigate('/login')
+//            localStorage.removeItem("/loginData")
+//         }
+//     }, [])
+    
 
     
 
@@ -40,9 +41,9 @@ useEffect(() => {
       </Routes>
       } */}
    <RouterComponent/>
-      <Routes>
+      {/* <Routes>
           <Route  path="/login" element={<LoginPage/>}/>
-      </Routes>
+      </Routes> */}
       </ThemeProvider>
     </UserDataProvider>
   );
