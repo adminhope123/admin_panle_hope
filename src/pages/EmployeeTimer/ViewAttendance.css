@@ -1,0 +1,40 @@
+.view-attendance-page{
+
+}
+.view-attendance-page .MuiAvatar-root{
+    width: 150px;
+    height: 150px;
+    box-shadow: 0 0 2px 0 rgba(145, 158, 171, 0.2), 0 12px 24px -4px rgba(145, 158, 171, 0.12);
+    border-radius: 18px;
+}
+.view-attendance-page .MuiAvatar-root img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0% !important;
+}
+.view-attendance-page .month-year-picker{
+    margin-top: 0px;
+}
+.view-attendance-page .month-year-picker .month-picker > div > div{
+    border-radius: 13px;
+    width: 59px;
+    height: 40px;
+    background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);
+    color: white;
+}
+.view-attendance-page .month-year-picker .month-picker > div{
+    display: flex;
+    justify-content: flex-end;
+}
+.view-attendance-page .month-year-picker{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+.view-attendance-page .caption{
+    display: none !important;
+}
+.view-attendance-page .controls{
+    color: slategrey;
+}

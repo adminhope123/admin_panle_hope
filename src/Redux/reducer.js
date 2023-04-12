@@ -7,6 +7,8 @@ const initialState = {
   validation:[], 
   events: [],
   event: {},
+  attendances:[],
+  attendance:{}
 };
 
 const usersReducers = (state = initialState, action) => {
@@ -84,7 +86,7 @@ const usersReducers = (state = initialState, action) => {
       case type.ATTENDANCE_GET_API:
       return {
         ...state,
-        users: action.payload,
+        attendances: action.payload,
         loading: false,
       };
     default:

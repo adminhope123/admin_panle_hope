@@ -21,11 +21,11 @@ export default function EmployeeAttendance() {
   const dispatch=useDispatch()
   const navigate=useNavigate()
   const [viewEmployeeData,setViewEmployeeData]=useState()
-  const {users}=useSelector(res=>res.data)
+  const {attendances}=useSelector(res=>res.data)
   
   const attendanceData=()=>{
         dispatch(attendanceGetApi())
-        console.log("users",users)
+        console.log("users",attendances)
   }
 
   useEffect(() => {

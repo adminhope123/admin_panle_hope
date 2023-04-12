@@ -9,9 +9,9 @@ const getEmployee = (users) => ({
 });
 
 
-const attendanceGet=(users)=>({
+const attendanceGet=(attendances)=>({
   type:type.ATTENDANCE_GET_API,
-  payload:users
+  payload:attendances
 })
 
 
