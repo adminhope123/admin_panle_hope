@@ -12,6 +12,7 @@ import EventPage from './pages/Event/EventPage';
 import EmployeeAttendance from './pages/EmployeeTimer/EmployeeAttendance';
 import AllStaffMembers from './pages/AllStaffMembers';
 import ActivePage from './pages/ActivePage';
+import ViewAttendance from './pages/EmployeeTimer/ViewAttendance';
 
 // ----------------------------------------------------------------------
 
@@ -26,6 +27,7 @@ export default function Router() {
         { path: 'employee', element: <UserPage /> },
         { path: 'employeestatus', element: <ActivePage /> },
         { path: 'employeeAttendance', element: < EmployeeAttendance/> },
+        { path: 'viewAttendance/:E_Id', element: <ViewAttendance/> },
         { path: 'allstaffmembers', element: <AllStaffMembers /> },
         { path: 'event', element: <EventPage /> },
         { path: 'blog', element: <BlogPage /> },
@@ -35,18 +37,18 @@ export default function Router() {
       path: 'login',
       element: <LoginPage />,
     },
-    {
-      element: <SimpleLayout />,
-      children: [
-        { element: <Navigate to="/dashboard/app" />, index: true },
-        { path: '404', element: <Page404 /> },
-        { path: '*', element: <Navigate to="/404" /> },
-      ],
-    },
-    {
-      path: '*',
-      element: <Navigate to="/404" replace />,
-    },
+    // {
+    //   element: <SimpleLayout />,
+    //   children: [
+    //     { element: <Navigate to="/dashboard/app" />, index: true },
+    //     // { path: '404', element: <Page404 /> },
+    //     { path: '*', element: <Navigate to="/dashboard/app" /> },
+    //   ],
+    // },
+    // {
+    //   path: '*',
+    //   element: <Navigate to="/dashboard/app" replace />,
+    // },
   ]);
 
   return routes;

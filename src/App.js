@@ -10,6 +10,7 @@ import { UserDataProvider } from './UserDataContext';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import LoginPage from './pages/LoginPage';
+import ViewAttendance from './pages/EmployeeTimer/ViewAttendance';
 
 // ----------------------------------------------------------------------
 
@@ -41,9 +42,9 @@ export default function App() {
       </Routes>
       } */}
    <RouterComponent/>
-      {/* <Routes>
-          <Route  path="/login" element={<LoginPage/>}/>
-      </Routes> */}
+      <Routes>
+          {/* <Route  path="/login" element={<LoginPage/>}/> */}
+      </Routes>
       </ThemeProvider>
     </UserDataProvider>
   );
