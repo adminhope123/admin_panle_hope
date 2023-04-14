@@ -6,9 +6,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { attendanceGetApi } from 'src/Redux/actions'
 import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
+import CircularProgress, {
+  circularProgressClasses,
+} from '@mui/material/CircularProgress';
 import MonthYearPicker from "react-month-year-picker";
+import { styled } from '@mui/material/styles';
 import { UserListHead } from 'src/sections/@dashboard/user'
 import PresentIcon from './yes.png'
+import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 import AbsentIcon from './cross.png'
 import { CribSharp } from '@mui/icons-material'
 
@@ -25,6 +30,9 @@ const TABLE_HEAD = [
 ];
 
 
+
+
+
 export default function ViewAttendance() {
   const { E_Id } = useParams()
   const [dataUser, setDataUser] = useState()
@@ -39,6 +47,37 @@ export default function ViewAttendance() {
   const [getMonthData, setGetMonthData] = useState()
   const [presentData,setPresentData]=useState()
   const [absentData,setAbsentData]=useState()
+  const [dattttttttt,setDattttttttt]=useState()
+
+  const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
+    height: 10,
+    borderRadius: 5,
+    [`&.${linearProgressClasses.colorPrimary}`]: {
+      backgroundColor: theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
+    },
+    [`& .${linearProgressClasses.bar}`]: {
+      borderRadius: 5,
+      backgroundColor: theme.palette.mode === 'light' ? '#1a90ff' : '#308fe8',
+    },
+  }));
+
+  const colorData=["#f44336","#f5d496","#61af61"]
+  const data=()=>{
+    const dataFilter = attendances?.map((item) =>{ 
+      const data=item?.totalworkrange
+      console.log("Data",data)
+      if( "33%"< data){
+        setDattttttttt('#f44336')
+      }else if('50%' < data){
+        setDattttttttt('#f5d496')
+      }else if('50%' < data){
+        setDattttttttt('#61af61')
+      }
+    })
+  }
+useEffect(() => {
+      
+}, [])
 
 
   const handleChangeMonth = (month) => {
@@ -106,6 +145,7 @@ export default function ViewAttendance() {
   return (
     <div className='view-attendance-page'>
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        <button onClick={data}>Click</button>
         <Box>
           {
             dataUser?.map((item) => {
@@ -164,7 +204,7 @@ export default function ViewAttendance() {
                           <TableCell align='center'>{item?.month}</TableCell>
                           <TableCell align='center'>{item?.year}</TableCell>
                           <TableCell align='center'>{item?.totalWorkTime}</TableCell>
-                          <TableCell align='center'>{item?.totalworkrange}</TableCell>
+                          <TableCell align='center'><div className={`${item?.totalworkrange <'50%' ? 'range-start' :"range-end"}`}>    <BorderLinearProgress variant="determinate" value={item?.totalworkrange} /></div></TableCell>
                           <TableCell align='center' style={{ width: 160 }} >
                   {item?.present === "true" ? (
                     <div className="check-icon ">
