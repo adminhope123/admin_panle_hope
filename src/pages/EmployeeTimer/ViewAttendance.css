@@ -121,7 +121,9 @@
 }
 .range-start .MuiLinearProgress-bar{
    background: #f44336;
+   background-color: #0093E9;
 }
 .range-end .MuiLinearProgress-bar{
     background: #61af61;
+    background-color: #0093E9;
 }
