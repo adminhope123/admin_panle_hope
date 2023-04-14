@@ -38,3 +38,35 @@
 .view-attendance-page .controls{
     color: slategrey;
 }
+.view-attendance-page .check-icon .MuiSvgIcon-root {
+    background-color: #4cb050;
+    color: white;
+    font-size: 25px;
+    border-radius: 5px;
+}
+.view-attendance-page .close-icon .MuiSvgIcon-root{
+    background-color: #f44236;
+    color: white;
+    font-size: 25px;
+    padding: 2px;
+    border-radius: 5px;
+}
+.view-attendance-page .not-data{
+    display: flex;
+    position: absolute;
+    left: 50%;
+    top: 59%;
+}
+.view-attendance-page .not-task{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+}
+.view-attendance-page .not-task .empty-state__message{
+    color: #38a169;
+      font-size: 1.5rem;
+      font-weight: 500;
+      margin-top: 0.85rem;
+}
