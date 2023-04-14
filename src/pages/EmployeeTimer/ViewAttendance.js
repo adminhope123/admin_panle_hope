@@ -8,11 +8,16 @@ import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
 import MonthYearPicker from "react-month-year-picker";
 import { UserListHead } from 'src/sections/@dashboard/user'
+import PresentIcon from './yes.png'
+import AbsentIcon from './cross.png'
 import { CribSharp } from '@mui/icons-material'
+
 
 const TABLE_HEAD = [
   { id: "date", label: "Date", alignRight: false },
   { id: "day", label: "Day", alignRight: false },
+  { id: "month", label: "Month", alignRight: false },
+  { id: "year", label: "Year", alignRight: false },
   { id: "totalWork", label: "Total Work", alignRight: false },
   { id: "workingRange", label: "Working Range", alignRight: false },
   { id: "present", label: "Present", alignRight: false },
@@ -32,6 +37,9 @@ export default function ViewAttendance() {
   const [smonth, setMonth] = useState(name);
   const [syear, setYear] = useState(year);
   const [getMonthData, setGetMonthData] = useState()
+  const [presentData,setPresentData]=useState()
+  const [absentData,setAbsentData]=useState()
+
 
   const handleChangeMonth = (month) => {
     setMonth(month);
@@ -42,6 +50,16 @@ export default function ViewAttendance() {
     const getYear = syear.toString()
     const dataFilterData = dataFilter?.filter((item) => item?.month === getFormet && item?.year === getYear)
     setGetMonthData(dataFilterData)
+    const getDataPresetn=dataFilterData?.filter((item)=>item?.present==='true')
+    const getPresent=getDataPresetn?.map((item)=>{return item?.present})
+    const dataData=getPresent?.length
+    setPresentData(dataData)
+    console.log("getData",getPresent.length)
+    const getDataAbsent=dataFilterData?.filter((item)=>item?.absent==='true')
+    const getAbsent=getDataAbsent?.map((item)=>{return item?.absent})
+    const dataDataData=getAbsent?.length
+    setAbsentData(dataDataData)
+    console.log("getData",getAbsent.length)
   };
 
  const getDataData=()=>{
@@ -54,6 +72,16 @@ export default function ViewAttendance() {
   const getYear=year.toString()
     const notSeletctData=dataFilter?.filter((item) => item?.month === name && item?.year === getYear)
     setGetMonthData(notSeletctData)
+    const getDataPresetn=notSeletctData?.filter((item)=>item?.present==='true')
+    const getPresent=getDataPresetn?.map((item)=>{return item?.present})
+    const dataData=getPresent?.length
+    setPresentData(dataData)
+    console.log("getData",getPresent.length)
+    const getDataAbsent=notSeletctData?.filter((item)=>item?.absent==='true')
+    const getAbsent=getDataAbsent?.map((item)=>{return item?.absent})
+    const dataDataData=getAbsent?.length
+    setAbsentData(dataDataData)
+    console.log("getData",getAbsent.length)
  }
   useEffect(() => {
     getDataData()
@@ -107,6 +135,10 @@ export default function ViewAttendance() {
           />
         </Box>
       </Box>
+      <Box sx={{display:"flex"}}>
+        <div className='present-data'><img src={PresentIcon}/><h6>Present :<span>{presentData}</span></h6></div>
+        <div className='absent-data'><img src={AbsentIcon}/><h6>Present :<span>{absentData}</span></h6></div>
+      </Box>
       <Box sx={{ marginTop: "20px" }}>
         <Table>
           <UserListHead
@@ -129,6 +161,8 @@ export default function ViewAttendance() {
                         <TableRow>
                           <TableCell align='center'>{item?.date}</TableCell>
                           <TableCell align='center'>{item?.day}</TableCell>
+                          <TableCell align='center'>{item?.month}</TableCell>
+                          <TableCell align='center'>{item?.year}</TableCell>
                           <TableCell align='center'>{item?.totalWorkTime}</TableCell>
                           <TableCell align='center'>{item?.totalworkrange}</TableCell>
                           <TableCell align='center' style={{ width: 160 }} >

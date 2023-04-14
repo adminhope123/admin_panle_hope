@@ -70,3 +70,50 @@
       font-weight: 500;
       margin-top: 0.85rem;
 }
+.present-data{
+    display: flex;
+    align-items: center;
+    width: 17%;
+    background: linear-gradient(to right, rgba(49,207,171,0.5), #50e3c2);
+    padding: 4px;
+    margin-right: 20px;
+    border: 1px solid #4cb050;
+    border-radius: 12px;
+}
+.present-data img {
+    width: 25px;
+    height: 25px;
+}
+.present-data h6{
+    font-size: 15px;
+    margin: 0;
+    padding-left: 10px;
+    font-weight: 100;
+}
+.present-data span{
+    font-size: 15px;
+    margin-left: 4px;
+}
+.absent-data{
+    display: flex;
+    align-items: center;
+    width: 17%;
+    background: radial-gradient(circle at 10% 20%, rgb(211, 49, 49) 0%, rgb(226, 37, 37) 82.8%);    padding: 4px;
+    border: 1px solid #f44236;
+    border-radius: 12px;
+}
+.absent-data img {
+    width: 25px;
+    height: 25px;
+}
+.absent-data h6{
+    font-size: 15px;
+    margin: 0;
+    padding-left: 10px;
+    color: white;
+    font-weight: 100;
+}
+.absent-data span{
+    font-size: 15px;
+    margin-left: 4px;
+}
